@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جامعة 6 أكتوبر - موديول IMB | محاكي امتحانات البايوكيميستري الشامل</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Cairo for Arabic, Inter for English) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        medical: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+                        slateDark: '#0f172a'
+                    },
+                    fontFamily: {
+                        ar: ['Cairo', 'sans-serif'],
+                        en: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .en-text {
+            font-family: 'Inter', 'Cairo', sans-serif;
+            direction: ltr;
+            text-align: left;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #0d9488;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-teal-500 selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-medical-900 via-medical-800 to-slateDark text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-teal-500/20 border border-teal-400/30 flex items-center justify-center text-teal-300 text-xl shadow-inner">
+                    <i class="fa-solid fa-dna"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg sm:text-xl tracking-tight leading-snug">جامعة 6 أكتوبر - موديول IMB</h1>
+                    <p class="text-xs text-teal-200 font-medium">دليل المراجعة الشامل - د. أحمد حسام (189 سؤال مقسمة على 11 درساً)</p>
+                </div>
+            </div>
+
+            <!-- Student Info Badge & Quick Actions -->
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex items-center gap-2 bg-slate-800/80 border border-teal-500/30 px-3 py-1.5 rounded-lg text-xs">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="font-semibold text-teal-100">د. محمد - طب بشري 6 أكتوبر</span>
+                </div>
+                <button onclick="confirmResetAllData()" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-300 border border-red-500/30 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5" title="تصفير السجل وإعادة البدء">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span>إعادة ضبط السجل</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Container -->
+    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex-1">
+        
+        <!-- SECTION 1: HOME / DASHBOARD & MODE SELECTION -->
+        <div id="screen-home" class="space-y-6 animate-fade-in">
+            
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-l from-medical-800 to-medical-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+                <div class="absolute -left-10 -bottom-10 opacity-10 text-white text-9xl pointer-events-none">
+                    <i class="fa-solid fa-microscope"></i>
+                </div>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-block px-3 py-1 bg-teal-500/20 border border-teal-400/30 text-teal-200 text-xs font-semibold rounded-full mb-3">
+                        <i class="fa-solid fa-circle-check ml-1 text-emerald-400"></i> بنك الأسئلة المعتمد - موديول IMB
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mb-2">أهلاً بك دكتور محمد، جاهز للتحدي؟</h2>
+                    <p class="text-slate-200 text-sm leading-relaxed mb-4">
+                        اختر الدرس الذي ترغب في مراجعته، أو خوض موديول الميدتيرم الكامل، أو قم بحل بنك الأخطاء السابقة لتضمن التميز وحصد الدرجة النهائة.
+                    </p>
+                    
+                    <!-- Quick Stats Overview -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mt-2">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+                            <span class="text-xs text-teal-200 block">إجمالي الأسئلة</span>
+                            <span class="text-xl font-bold text-white">189</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+                            <span class="text-xs text-teal-200 block">عدد الدروس</span>
+                            <span class="text-xl font-bold text-white">11 درس</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+                            <span class="text-xs text-teal-200 block">الأسئلة المحلولة</span>
+                            <span id="home-stat-solved" class="text-xl font-bold text-emerald-300">0</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+                            <span class="text-xs text-teal-200 block">بنك الأخطاء</span>
+                            <span id="home-stat-mistakes" class="text-xl font-bold text-amber-300">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Settings Bar -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-medical-600 text-lg"></i>
+                    <h3 class="font-bold text-slate-800 text-sm sm:text-base">إعدادات ونظام الاختبار:</h3>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-4 text-xs sm:text-sm">
+                    <!-- Mode Toggle: Instant Practice vs Exam Mode -->
+                    <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200">
+                        <button id="mode-btn-practice" onclick="setQuizMode('practice')" class="px-3 py-1.5 rounded-md font-semibold transition-all bg-white text-medical-700 shadow-sm">
+                            <i class="fa-solid fa-bolt ml-1 text-amber-500"></i> تدريب فوري (إظهار الشرح فوراً)
+                        </button>
+                        <button id="mode-btn-exam" onclick="setQuizMode('exam')" class="px-3 py-1.5 rounded-md font-semibold transition-all text-slate-600 hover:text-slate-900">
+                            <i class="fa-solid fa-graduation-cap ml-1 text-teal-600"></i> محاكاة امتحان (نتيجة في النهاية)
+                        </button>
+                    </div>
+
+                    <!-- Timer Option -->
+                    <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                        <i class="fa-regular fa-clock text-slate-500"></i>
+                        <span class="text-slate-600 font-medium">المؤقت:</span>
+                        <select id="timer-select" onchange="updateTimerSetting()" class="bg-transparent font-bold text-slate-800 focus:outline-none cursor-pointer">
+                            <option value="none">بدون مؤقت</option>
+                            <option value="countup">تصاعدي (حساب الوقت)</option>
+                            <option value="30">تنازلي (30 دقيقة)</option>
+                            <option value="60">تنازلي (60 دقيقة)</option>
+                            <option value="90">تنازلي (90 دقيقة)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Modes Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <!-- Full Mid-term -->
+                <div onclick="startQuiz('full')" class="bg-white hover:bg-teal-50/50 rounded-xl p-5 border border-slate-200 hover:border-medical-500 shadow-sm transition-all cursor-pointer group flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-teal-100 text-medical-700 flex items-center justify-center font-bold text-lg mb-3 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-base mb-1">الميدتيرم الشامل (Full Exam)</h4>
+                        <p class="text-slate-500 text-xs leading-relaxed">حل جميع أسئلة الموديول الـ 189 بالكامل في اختبار واحد منظم.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-medical-700">
+                        <span>189 سؤال</span>
+                        <span class="group-hover:translate-x-[-4px] transition-transform">ابدأ الآن &larr;</span>
+                    </div>
+                </div>
+
+                <!-- Random Practice Quiz -->
+                <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg mb-3">
+                            <i class="fa-solid fa-shuffle"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-base mb-1">اختبار عشوائي سريع</h4>
+                        <p class="text-slate-500 text-xs leading-relaxed mb-3">اختر عدداً عشوائياً من الأسئلة من جميع الدروس لاختبار معلوماتك السريعة.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="startQuiz('random', 20)" class="flex-1 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-xs rounded-lg transition-colors border border-purple-200">20 سؤال</button>
+                        <button onclick="startQuiz('random', 30)" class="flex-1 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-xs rounded-lg transition-colors border border-purple-200">30 سؤال</button>
+                        <button onclick="startQuiz('random', 50)" class="flex-1 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-xs rounded-lg transition-colors border border-purple-200">50 سؤال</button>
+                    </div>
+                </div>
+
+                <!-- Retake Mistakes Only -->
+                <div onclick="startQuiz('mistakes')" class="bg-white hover:bg-amber-50/50 rounded-xl p-5 border border-slate-200 hover:border-amber-400 shadow-sm transition-all cursor-pointer group flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg mb-3 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-base mb-1">إعادة حل الأسئلة الخاطئة فقط</h4>
+                        <p class="text-slate-500 text-xs leading-relaxed">تجميع تلقائي لجميع الأسئلة التي أخطأت بها سابقاً لإعادة إتقانها.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-700">
+                        <span id="mistakes-count-badge">0 سؤال خاطئ</span>
+                        <span class="group-hover:translate-x-[-4px] transition-transform">ابدأ المراجعة &larr;</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Lessons Selection Grid (11 Lessons) -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-medical-600"></i>
+                        <span>اختر درساً محدداً للمذاكرة (11 درساً):</span>
+                    </h3>
+                </div>
+
+                <div id="lessons-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Cards dynamically populated by JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SECTION 2: ACTIVE QUIZ INTERFACE -->
+        <div id="screen-quiz" class="hidden space-y-4 animate-fade-in">
+            
+            <!-- Top Bar: Progress, Timer & Controls -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30">
+                <div class="flex items-center gap-3">
+                    <button onclick="confirmExitQuiz()" class="text-slate-400 hover:text-red-500 text-lg transition-colors" title="إنهاء الخروج">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                    <div>
+                        <h3 id="quiz-title-display" class="font-bold text-slate-900 text-sm sm:text-base">Lesson 1: Nucleotides & Nucleosides</h3>
+                        <p class="text-xs text-slate-500" id="quiz-subtitle-display">السؤال الحالي: 1 من 24</p>
+                    </div>
+                </div>
+
+                <!-- Timer & Actions -->
+                <div class="flex items-center gap-3">
+                    <div id="timer-badge" class="hidden items-center gap-2 bg-slate-900 text-teal-300 font-mono text-sm px-3 py-1.5 rounded-lg font-bold shadow-inner">
+                        <i class="fa-regular fa-clock"></i>
+                        <span id="timer-text">00:00</span>
+                    </div>
+
+                    <button id="btn-flag" onclick="toggleFlagCurrentQuestion()" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300 text-xs font-bold transition-all flex items-center gap-1.5">
+                        <i class="fa-regular fa-bookmark"></i>
+                        <span id="flag-btn-text">تعليم السؤال</span>
+                    </button>
+
+                    <button onclick="confirmSubmitQuiz()" class="px-4 py-1.5 rounded-lg bg-medical-700 hover:bg-medical-800 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>إنهاء والتصحيح</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="quiz-progress-bar" class="bg-teal-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <!-- Quiz Main Grid (Question Box + Question Navigator Sidebar) -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                <!-- Question & Options Box (3 Cols) -->
+                <div class="lg:col-span-3 space-y-4">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 flex flex-col justify-between min-h-[420px]">
+                        
+                        <div>
+                            <!-- Question Header Badge -->
+                            <div class="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
+                                <span class="text-xs font-bold text-medical-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-200" id="q-lesson-badge">Lesson 1</span>
+                                <span class="text-xs text-slate-400 font-medium" id="q-orig-id">Orig. #5</span>
+                            </div>
+
+                            <!-- Question Text -->
+                            <h3 id="question-text" class="en-text text-lg sm:text-xl font-bold text-slate-900 leading-relaxed mb-6">
+                                <!-- Loaded dynamically -->
+                            </h3>
+
+                            <!-- Options List -->
+                            <div id="options-container" class="space-y-3">
+                                <!-- Options dynamically loaded -->
+                            </div>
+                        </div>
+
+                        <!-- Instant Feedback & Explanation Box (Shown in Practice Mode or after Selection) -->
+                        <div id="explanation-box" class="hidden mt-6 p-4 rounded-xl border transition-all animate-fade-in">
+                            <div class="flex items-center gap-2 mb-2 font-bold text-sm" id="explanation-title">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <span>الشرح والتوضيح العلمي:</span>
+                            </div>
+                            <p id="explanation-text" class="text-xs sm:text-sm leading-relaxed">
+                                <!-- Explanation text -->
+                            </p>
+                        </div>
+
+                        <!-- Bottom Question Actions -->
+                        <div class="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <button id="btn-prev" onclick="prevQuestion()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                                &rarr; السؤال السابق
+                            </button>
+
+                            <button onclick="clearCurrentAnswer()" class="text-xs text-slate-400 hover:text-slate-600 underline font-medium">
+                                مسح الإجابة
+                            </button>
+
+                            <button id="btn-next" onclick="nextQuestion()" class="px-5 py-2 rounded-xl bg-medical-700 text-white font-bold text-sm hover:bg-medical-800 shadow-sm transition-colors">
+                                السؤال التالي &larr;
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Sidebar: Question Navigator Grid (1 Col) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col h-full max-h-[550px]">
+                    <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+                        <h4 class="font-bold text-slate-800 text-sm">خريطة الأسئلة</h4>
+                        <span id="nav-counter" class="text-xs text-medical-700 font-bold bg-teal-50 px-2 py-0.5 rounded">0/0</span>
+                    </div>
+
+                    <!-- Filter buttons for Grid -->
+                    <div class="grid grid-cols-3 gap-1 mb-3 text-[11px] font-bold text-center">
+                        <button onclick="filterGrid('all')" class="py-1 bg-slate-100 rounded text-slate-700 hover:bg-slate-200">الكل</button>
+                        <button onclick="filterGrid('flagged')" class="py-1 bg-amber-50 rounded text-amber-700 hover:bg-amber-100">المعلّمة</button>
+                        <button onclick="filterGrid('unanswered')" class="py-1 bg-slate-100 rounded text-slate-500 hover:bg-slate-200">غير محلولة</button>
+                    </div>
+
+                    <!-- Question Grid Buttons -->
+                    <div id="navigator-grid" class="grid grid-cols-5 gap-2 overflow-y-auto custom-scrollbar flex-1 p-1">
+                        <!-- Buttons 1..N generated by JS -->
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-200 border"></span> غير مجاب</div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-teal-600 text-white"></span> تم الإجابة</div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-400"></span> مراجعة</div>
+                        <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> صحيح</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SECTION 3: RESULTS & DETAILED DASHBOARD -->
+        <div id="screen-results" class="hidden space-y-6 animate-fade-in">
+            
+            <!-- Result Summary Card -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 text-center relative overflow-hidden">
+                <div class="max-w-2xl mx-auto">
+                    <span class="inline-block px-3 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded-full mb-2">تم إنهاء الاختبار بنجاح</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6">تقرير الأداء والنتيجة التفصيلية</h2>
+
+                    <!-- Circular Score Chart -->
+                    <div class="relative w-36 h-36 mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                            <path class="text-slate-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="result-svg-circle" class="text-teal-600 transition-all duration-1000 stroke-current" stroke-dasharray="0, 100" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div class="absolute flex flex-col items-center justify-center">
+                            <span id="result-score-percent" class="text-3xl font-black text-slate-900">0%</span>
+                            <span id="result-grade-badge" class="text-xs font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-800 mt-1">ممتاز</span>
+                        </div>
+                    </div>
+
+                    <p id="result-feedback-text" class="text-slate-600 text-sm font-medium mb-6">
+                        <!-- Dynamic feedback -->
+                    </p>
+
+                    <!-- Score Metrics Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-6">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <span class="text-xs text-slate-500 block">إجمالي الأسئلة</span>
+                            <span id="result-total-qs" class="text-lg font-bold text-slate-800">0</span>
+                        </div>
+                        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                            <span class="text-xs text-emerald-700 block">الإجابات الصحيحة</span>
+                            <span id="result-correct-qs" class="text-lg font-bold text-emerald-700">0</span>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded-xl border border-red-200">
+                            <span class="text-xs text-red-700 block">الإجابات الخاطئة</span>
+                            <span id="result-wrong-qs" class="text-lg font-bold text-red-700">0</span>
+                        </div>
+                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+                            <span class="text-xs text-amber-700 block">أسئلة تم تخطيها</span>
+                            <span id="result-skipped-qs" class="text-lg font-bold text-amber-700">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <button onclick="returnToHome()" class="px-6 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-colors">
+                            العودة للرئيسية
+                        </button>
+                        <button onclick="retakeCurrentQuiz()" class="px-6 py-2.5 rounded-xl bg-medical-700 text-white font-bold text-sm hover:bg-medical-800 transition-colors shadow-sm">
+                            إعادة هذا الاختبار
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Performance Breakdown By Lesson -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-medical-600"></i>
+                    <span>تحليل الأداء بحسب الدروس:</span>
+                </h3>
+                <div id="lesson-performance-breakdown" class="space-y-3">
+                    <!-- Lesson progress bars loaded via JS -->
+                </div>
+            </div>
+
+            <!-- Question Breakdown Review List -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-medical-600"></i>
+                        <span>مراجعة الإجابات والشرح التفصيلي:</span>
+                    </h3>
+
+                    <!-- Review Filters -->
+                    <div class="flex gap-1 bg-slate-100 p-1 rounded-lg text-xs font-bold">
+                        <button onclick="filterReviewList('all')" id="rf-all" class="px-3 py-1 rounded-md bg-white text-slate-800 shadow-sm">الكل</button>
+                        <button onclick="filterReviewList('correct')" id="rf-correct" class="px-3 py-1 rounded-md text-emerald-700 hover:bg-white/50">الصحيحة</button>
+                        <button onclick="filterReviewList('incorrect')" id="rf-incorrect" class="px-3 py-1 rounded-md text-red-700 hover:bg-white/50">الخاطئة</button>
+                        <button onclick="filterReviewList('flagged')" id="rf-flagged" class="px-3 py-1 rounded-md text-amber-700 hover:bg-white/50">المعلّمة</button>
+                    </div>
+                </div>
+
+                <!-- Review Items Container -->
+                <div id="review-items-container" class="space-y-4">
+                    <!-- Cards dynamically populated -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>موديول IMB - كلية الطب البشري، جامعة 6 أكتوبر | تم التطوير خصيصاً للدكتور محمد 🎓</p>
+        </div>
+    </footer>
+
+    <!-- Global Confirmation Modal -->
+    <div id="modal-container" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fade-in text-center">
+            <div id="modal-icon" class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl mx-auto mb-3">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h3 id="modal-title" class="font-bold text-slate-900 text-lg mb-2">تأكيد الإجراء</h3>
+            <p id="modal-body" class="text-slate-600 text-sm leading-relaxed mb-6">هل أنت تأكد من رغبتك في الاستمرار؟</p>
+            <div class="flex gap-3 justify-center">
+                <button onclick="closeModal()" class="px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition-colors">إلغاء</button>
+                <button id="modal-confirm-btn" class="px-5 py-2 rounded-xl bg-medical-700 hover:bg-medical-800 text-white font-bold text-sm transition-colors shadow-sm">موافق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script Data & Logic -->
+    <script>
+        /* ==========================================================================
+           1. COMPLETE QUESTION BANK DATA (189 Questions across 11 Lessons)
+           ========================================================================== */
+        const LESSONS_METADATA = [
+            { id: 1, title: "Lesson 1: Nucleotides & Nucleosides", count: 24 },
+            { id: 2, title: "Lesson 2: Structure of DNA & RNA", count: 38 },
+            { id: 3, title: "Lesson 3: Mitochondrial DNA", count: 6 },
+            { id: 4, title: "Lesson 4: DNA Replication & Repair", count: 37 },
+            { id: 5, title: "Lesson 5: Telomeres & Telomerase", count: 8 },
+            { id: 6, title: "Lesson 6: Transcription", count: 25 },
+            { id: 7, title: "Lesson 7: RNA Processing", count: 14 },
+            { id: 8, title: "Lesson 8: Genetic Code & Translation", count: 23 },
+            { id: 9, title: "Lesson 9: Post-translational Modification", count: 6 },
+            { id: 10, title: "Lesson 10: Gene Regulation & Epigenetics", count: 5 },
+            { id: 11, title: "Lesson 11: Apoptosis & p53", count: 3 }
+        ];
+
+        const ALL_QUESTIONS = [
+            // --- LESSON 1 (24 Qs) ---
+            { id: 1, lessonId: 1, orig: 5, q: "Which of the following compounds act as a methyl donor?", options: ["SAM", "ATP", "cAMP", "PAPS"], answer: 0, exp: "S-Adenosylmethionine (SAM) is the primary active methyl donor in biochemical transmethylation reactions." },
+            { id: 2, lessonId: 1, orig: 16, q: "Which of the following compounds act as an active methyl donor?", options: ["ATP", "cAMP", "AMP", "SAM"], answer: 3, exp: "SAM (S-Adenosylmethionine) serves as the main active methyl donor." },
+            { id: 3, lessonId: 1, orig: 30, q: "The pyrimidine base present in BOTH DNA and RNA is:", options: ["Cytosine", "Thymine", "Uracil", "Adenine"], answer: 0, exp: "Cytosine is found in both DNA and RNA. Thymine is exclusive to DNA, while Uracil is exclusive to RNA." },
+            { id: 4, lessonId: 1, orig: 31, q: "Which of the following nucleotides forms glycogen and glucuronic acid?", options: ["UDP", "CDP", "GDP", "ADP"], answer: 0, exp: "UDP-glucose and UDP-glucuronic acid are active nucleotide intermediates in glycogen synthesis and detoxification." },
+            { id: 5, lessonId: 1, orig: 32, q: "Purine nucleotides include:", options: ["Adenine and thymine", "Adenine and cytosine", "Adenine and guanine", "All of the above"], answer: 2, exp: "Purines consist of Adenine (A) and Guanine (G). Thymine and Cytosine are pyrimidines." },
+            { id: 6, lessonId: 1, orig: 33, q: "Pyrimidine nucleotides include:", options: ["Cytosine and thymine", "Adenine and cytosine", "Adenine and guanine", "All of the above"], answer: 0, exp: "Pyrimidines include Cytosine, Thymine (in DNA), and Uracil (in RNA)." },
+            { id: 7, lessonId: 1, orig: 34, q: "Nucleotide consists of:", options: ["Ribose, nitrogenous base and choline", "Ribose, nitrogenous base and serine", "Ribose, nitrogenous base and phosphate", "Ribose, phosphate and choline"], answer: 2, exp: "A nucleotide = Pentose Sugar + Nitrogenous Base + Phosphate group." },
+            { id: 8, lessonId: 1, orig: 35, q: "The following is secondary messenger for hormones:", options: ["ATP", "cGMP", "IMP", "CTP"], answer: 1, exp: "cGMP (and cAMP) acts as a second messenger for hormonal signal transduction." },
+            { id: 9, lessonId: 1, orig: 61, q: "Gout is a disease characterized by elevation of:", options: ["CDP", "UDP", "Urea", "Uric acid"], answer: 3, exp: "Gout is hyperuricemia leading to deposition of monosodium urate crystals in joints." },
+            { id: 10, lessonId: 1, orig: 62, q: "Purines of dietary origin and not produced uric acid in body?", options: ["Adenine", "Xanthine", "Guanine", "Theophylline"], answer: 3, exp: "Theophylline (methylxanthine in tea/coffee) is metabolized without being converted into uric acid." },
+            { id: 11, lessonId: 1, orig: 63, q: "cAMP can be formed from:", options: ["AMP", "ATP", "ADP", "NAD"], answer: 1, exp: "cAMP is synthesized from ATP by Adenylyl Cyclase enzyme." },
+            { id: 12, lessonId: 1, orig: 64, q: "Which N atom of purines is attached to sugar in nucleotides?", options: ["N1", "N7", "N9", "N3"], answer: 2, exp: "In purine nucleotides, the N9 position connects via N-glycosidic bond to Carbon-1 of ribose/deoxyribose." },
+            { id: 13, lessonId: 1, orig: 65, q: "Which pyrimidine is present in both DNA and RNA?", options: ["Cytosine", "Dihydrouracil", "Thymine", "Uracil"], answer: 0, exp: "Cytosine is common to both DNA and RNA." },
+            { id: 14, lessonId: 1, orig: 67, q: "Nucleotide is converted to nucleoside by removal of which of the following?", options: ["Pentose", "Phosphate group", "Pyrimidine group", "Purine group"], answer: 1, exp: "Nucleotide minus phosphate group = Nucleoside." },
+            { id: 15, lessonId: 1, orig: 68, q: "6-amino purine is:", options: ["Adenine", "Guanine", "Cytosine", "Thymine"], answer: 0, exp: "Adenine chemically is 6-aminopurine." },
+            { id: 16, lessonId: 1, orig: 69, q: "5-methyl uracil is:", options: ["Adenine", "Guanine", "Thymine", "Uracil"], answer: 2, exp: "Thymine chemically is 5-methyluracil." },
+            { id: 17, lessonId: 1, orig: 143, q: "Active methionine (SAM) acts as:", options: ["Sulphate donor", "Methyl donor", "Hydrogen donor", "Oxygen donor"], answer: 1, exp: "SAM is the major biological methyl group donor." },
+            { id: 18, lessonId: 1, orig: 144, q: "A nucleotide is converted into a nucleoside by the removal of a:", options: ["Purine base", "Pyrimidine base", "Pentose", "Phosphate"], answer: 3, exp: "Removal of the phosphate group leaves a nucleoside." },
+            { id: 19, lessonId: 1, orig: 145, q: "3' phosphoadenosine 5' phosphosulfate (PAPS) acts as:", options: ["Sulphate donor", "Methyl donor", "Hydrogen donor", "CO2 donor"], answer: 0, exp: "PAPS is the active sulfate donor in sulfation reactions." },
+            { id: 20, lessonId: 1, orig: 146, q: "The chemical combination of ribose and nitrogen bases results in formation of a:", options: ["DNA molecule", "Nucleotide", "Gene", "Nucleoside"], answer: 3, exp: "Nitrogen base + pentose sugar = Nucleoside." },
+            { id: 21, lessonId: 1, orig: 147, q: "One of the following is NOT a hydrogen carrier:", options: ["NAD+", "FAD", "Coenzyme A", "NADP+"], answer: 2, exp: "Coenzyme A is an acyl/fatty acid group carrier, not a hydrogen carrier." },
+            { id: 22, lessonId: 1, orig: 148, q: "Coenzyme A acts as:", options: ["Methyl donor", "Sulfate donor", "Fatty acid/acyl carrier", "Hydrogen carrier"], answer: 2, exp: "CoA carries acyl and fatty acyl groups via its thiol (-SH) group." },
+            { id: 23, lessonId: 1, orig: 163, q: "A nucleoside consists of:", options: ["Nitrogenous base", "Purine or pyrimidine base + sugar", "Purine base + phosphorus", "Purine + sugar + phosphorus"], answer: 1, exp: "Nucleoside = Nitrogen base (purine/pyrimidine) + Pentose sugar." },
+            { id: 24, lessonId: 1, orig: 164, q: "A purine nucleotide is:", options: ["AMP", "UMP", "CMP", "TMP"], answer: 0, exp: "AMP contains Adenine, which is a purine base." },
+
+            // --- LESSON 2 (38 Qs) ---
+            { id: 25, lessonId: 2, orig: 12, q: "Guanine base pairing with cytosine in DNA results in:", options: ["bind sigma factor for transcription", "bound with 2 hydrogen bonds", "melting point higher than AT sequence", "melting point lower than AT sequence"], answer: 2, exp: "G-C pairs have 3 hydrogen bonds, giving G-C rich regions higher thermal stability (higher Tm)." },
+            { id: 26, lessonId: 2, orig: 36, q: "Nucleotides in DNA strand are read in which direction?", options: ["5' to 3' direction", "3' to 5' direction", "Both directions", "None of the above"], answer: 0, exp: "By standard convention, nucleic acid sequences are synthesized and read 5' to 3'." },
+            { id: 27, lessonId: 2, orig: 37, q: "The following base is present in RNA EXCEPT:", options: ["Cytosine", "Adenine", "Thymine", "Uracil"], answer: 2, exp: "Thymine is replaced by Uracil in RNA." },
+            { id: 28, lessonId: 2, orig: 38, q: "Adenine base pairing in DNA is between A and:", options: ["T", "C", "G", "U"], answer: 0, exp: "In DNA, Adenine pairs specifically with Thymine via 2 hydrogen bonds." },
+            { id: 29, lessonId: 2, orig: 39, q: "Guanine base pairing in DNA with cytosine occurs via:", options: ["Three hydrogen bonds", "Two hydrogen bonds", "Four hydrogen bonds", "One hydrogen bond"], answer: 0, exp: "G-C base pairing involves 3 hydrogen bonds." },
+            { id: 30, lessonId: 2, orig: 41, q: "tRNA is important for:", options: ["carry genetic information from nucleus", "carry amino acids during protein synthesis", "carry nitrogenous bases", "form ribosomes"], answer: 1, exp: "tRNA carries specific amino acids to the ribosome during translation." },
+            { id: 31, lessonId: 2, orig: 53, q: "RNA containing unusual modified bases is:", options: ["mRNA", "tRNA", "rRNA", "snRNA"], answer: 1, exp: "tRNA contains modified bases such as pseudouridine, dihydrouracil, and inosine." },
+            { id: 32, lessonId: 2, orig: 66, q: "Which of the following is correct in human DNA?", options: ["Adenine binds thymine by 3 hydrogen bonds", "Bases held over each other by ionic bonds", "CG rich areas have higher melting point than AT rich areas", "Guanine binds cytosine by 2 hydrogen bonds"], answer: 2, exp: "CG rich DNA requires higher denaturation temperature due to triple H-bonds." },
+            { id: 33, lessonId: 2, orig: 72, q: "Which nucleotide is NOT present in DNA primary structure?", options: ["dCMP", "dAMP", "dUMP", "dTMP"], answer: 2, exp: "dUMP is an intermediate and not part of mature standard DNA chains (replaced by dTMP)." },
+            { id: 34, lessonId: 2, orig: 74, q: "What is the nitrogenous base present in the RNA molecule instead of thymine?", options: ["Thymine", "Uracil", "Xanthine", "Hypoxanthine"], answer: 1, exp: "Uracil is present in RNA in place of thymine." },
+            { id: 35, lessonId: 2, orig: 75, q: "The sugar moiety present in RNA is:", options: ["Ribulose", "Arabinose", "Ribose", "Deoxyribose"], answer: 2, exp: "RNA contains D-Ribose, while DNA contains 2'-deoxyribose." },
+            { id: 36, lessonId: 2, orig: 76, q: "In tRNA molecule, the D arm is named for the presence of which base?", options: ["Uridine", "Pseudo-Uridine", "Dihydrouracil", "Thymidine"], answer: 2, exp: "The D arm of tRNA is named after Dihydrouracil." },
+            { id: 37, lessonId: 2, orig: 77, q: "DNA rich in G-C pairs has how many hydrogen bonds per pair?", options: ["1 Hydrogen bond", "2 Hydrogen bonds", "3 Hydrogen bonds", "4 Hydrogen bonds"], answer: 2, exp: "G-C base pairing involves 3 H-bonds." },
+            { id: 38, lessonId: 2, orig: 78, q: "The TΨC arm in the tRNA molecule possesses which sequence?", options: ["T, pseudo-uridine, and C", "T, uridine, and C", "T, dihydrouridine, and C", "T, adenine, and C"], answer: 0, exp: "TΨC stands for Ribothymidine (T), Pseudouridine (Ψ), and Cytidine (C)." },
+            { id: 39, lessonId: 2, orig: 79, q: "Purine base found in RNA is:", options: ["Cytosine", "Thymine", "Guanine", "Uracil"], answer: 2, exp: "Guanine (and Adenine) are the purine bases in RNA." },
+            { id: 40, lessonId: 2, orig: 80, q: "What are the building blocks of nucleic acids?", options: ["Nucleotides", "Nucleosides", "Amino acids", "Histones"], answer: 0, exp: "Nucleotides are the monomeric units of nucleic acids." },
+            { id: 41, lessonId: 2, orig: 82, q: "Chromatin is composed of:", options: ["Nucleic acids and proteins", "Nucleic acids only", "Proteins only", "Nucleic acids and sugars"], answer: 0, exp: "Chromatin consists of DNA bound to histone and non-histone proteins." },
+            { id: 42, lessonId: 2, orig: 83, q: "A phosphodiester bond is present in:", options: ["Nucleotides in a nucleic acid", "Monosaccharides in a polysaccharide", "Amino acids in a polypeptide", "Fatty acids in a diglyceride"], answer: 0, exp: "Phosphodiester bonds link adjacent nucleotides in DNA/RNA 3'-5'." },
+            { id: 43, lessonId: 2, orig: 84, q: "The two strands in DNA double helix are joined together by:", options: ["Covalent bonds", "Hydrogen bonds", "Ionic bonds", "Phosphodiester bonds"], answer: 1, exp: "Hydrogen bonds hold complimentary strands together." },
+            { id: 44, lessonId: 2, orig: 85, q: "Which ratio is constant for double-stranded DNA (Chargaff's Rule)?", options: ["(A+G)/(T+C)", "(A+T)/(G+C)", "(A+C)/(U+G)", "(A+U)/(G+C)"], answer: 0, exp: "According to Chargaff's rule, total purines equal total pyrimidines: (A+G)/(T+C) = 1.0." },
+            { id: 45, lessonId: 2, orig: 86, q: "Histones are basic proteins rich in:", options: ["Arginine and Lysine", "Arginine and Leucine", "Histidine and leucine", "Glutamate and aspartate"], answer: 0, exp: "Histones are strongly basic proteins rich in Lysine and Arginine." },
+            { id: 46, lessonId: 2, orig: 87, q: "Number of hydrogen bonds between adenine and thymine is:", options: ["1", "2", "3", "4"], answer: 1, exp: "A-T pairs have 2 hydrogen bonds." },
+            { id: 47, lessonId: 2, orig: 149, q: "Which type of RNA carries genetic information from DNA to ribosomes?", options: ["mRNA", "rRNA", "tRNA", "snRNA"], answer: 0, exp: "Messenger RNA (mRNA) carries genetic codes for translation." },
+            { id: 48, lessonId: 2, orig: 150, q: "The melting temperature (Tm) of DNA is increased by its:", options: ["A and T content", "G and C content", "Sugar content", "Phosphate content"], answer: 1, exp: "Higher G-C content increases denaturation/melting temperature." },
+            { id: 49, lessonId: 2, orig: 151, q: "One of the following proteins is NOT present within the core nucleosome octamer:", options: ["H1", "H2A", "H2B", "H3"], answer: 0, exp: "The nucleosome core octamer consists of 2 each of H2A, H2B, H3, H4. H1 is the linker histone." },
+            { id: 50, lessonId: 2, orig: 152, q: "The bonds that link the complementary base pairs in DNA double helix are:", options: ["Ionic bonds", "Peptide bonds", "Hydrogen bonds", "Hydrophobic bonds"], answer: 2, exp: "Base pairs link via non-covalent Hydrogen bonds." },
+            { id: 51, lessonId: 2, orig: 153, q: "One of the following nucleotides is NOT found in DNA:", options: ["dUMP", "dGMP", "dAMP", "dTMP"], answer: 0, exp: "dUMP is not present in functional DNA chains." },
+            { id: 52, lessonId: 2, orig: 154, q: "As regards tRNA, all of the following statements are correct EXCEPT:", options: ["Forms 15% of cellular RNA", "It contains unusual bases", "Has 5 distinct loops and an acceptor arm", "It has a cloverleaf 2D appearance"], answer: 2, exp: "tRNA cloverleaf has 3 main loop arms (D, Anticodon, TΨC) plus a variable loop and acceptor stem, not 5 loops." },
+            { id: 53, lessonId: 2, orig: 155, q: "The backbone of a nucleic acid molecule consists of alternating sequence of:", options: ["Sugar and phosphate groups", "Sugar and base groups", "Phosphate and base groups", "Sugar, phosphate, and base"], answer: 0, exp: "The structural backbone is formed by alternating Sugar-Phosphate-Sugar-Phosphate." },
+            { id: 54, lessonId: 2, orig: 157, q: "The arm of tRNA which contains the unusual base dihydrouracil is the:", options: ["Anticodon arm", "D-arm", "Extra arm", "TΨC arm"], answer: 1, exp: "D-arm = Dihydrouracil arm." },
+            { id: 55, lessonId: 2, orig: 158, q: "The nucleotides in the single backbone of DNA are held together by:", options: ["Hydrogen bonds", "Peptide bonds", "Phosphodiester bonds", "Glycosidic bonds"], answer: 2, exp: "Phosphodiester bonds covalently link 3'-OH and 5'-phosphate along the strand." },
+            { id: 56, lessonId: 2, orig: 159, q: "In double-stranded DNA molecule:", options: ["Guanine does not equal cytosine", "Adenine does not equal thymine", "Adenine equals uracil", "Number of guanine bases equals cytosine bases"], answer: 3, exp: "G = C and A = T in double-stranded DNA." },
+            { id: 57, lessonId: 2, orig: 160, q: "Which of the following is NOT a characteristic of transfer RNA?", options: ["It has a cloverleaf appearance", "It contains many unusual bases", "A given transfer RNA can carry any of the 20 amino acids", "It contains an anticodon loop"], answer: 2, exp: "Each tRNA is specific for ONLY ONE amino acid (cognate amino acid)." },
+            { id: 58, lessonId: 2, orig: 161, q: "In RNA molecule G != C and A != U because RNA is a:", options: ["Single stranded molecule", "Double stranded molecule", "Double stranded helix", "Polymer of purine ribonucleotides"], answer: 0, exp: "RNA is single-stranded, so base proportions are not constrained to 1:1 ratios." },
+            { id: 59, lessonId: 2, orig: 162, q: "As regards histones of chromatin:", options: ["They are acidic proteins", "They are negatively charged", "They are basic proteins rich in lysine and arginine", "There are 4 types of histones total"], answer: 2, exp: "Histones are positively charged basic proteins rich in Lysine and Arginine." },
+            { id: 60, lessonId: 2, orig: 165, q: "The nucleic acid base found in mRNA but not in DNA is:", options: ["Adenine", "Cytosine", "Guanine", "Uracil"], answer: 3, exp: "Uracil is present in RNA instead of Thymine." },
+            { id: 61, lessonId: 2, orig: 166, q: "All tRNA molecules contain a base-paired stem terminating in CCA at which end?", options: ["3' Termini", "5' Termini", "Anticodon arm", "5'-3' Termini"], answer: 0, exp: "The amino acid acceptor arm ends with 5'-CCA-3' at the 3'-terminus." },
+            { id: 62, lessonId: 2, orig: 167, q: "Left-handed double helix is present in:", options: ["Z-DNA", "A-DNA", "B-DNA", "None of these"], answer: 0, exp: "Z-DNA is a left-handed double helical conformation." },
+
+            // --- LESSON 3 (6 Qs) ---
+            { id: 63, lessonId: 3, orig: 6, q: "Regarding POLG (DNA Polymerase gamma) enzyme, which of the following is correct?", options: ["Responsible for leading strand in nucleus", "Responsible for lagging strand in nucleus", "It is non-sensitive to mutations", "It is sensitive to mutations causing mitochondrial diseases"], answer: 3, exp: "POLG replicates mitochondrial DNA; mutations lead to mitochondrial DNA depletion and myopathies." },
+            { id: 64, lessonId: 3, orig: 40, q: "Mitochondrial DNA is:", options: ["Double stranded", "Single strand", "Circular", "A and C"], answer: 3, exp: "mtDNA is double-stranded and circular (ds-circular)." },
+            { id: 65, lessonId: 3, orig: 70, q: "Which of the following results from mutations of mitochondrial DNA?", options: ["Liver failure", "Myopathies and neurological disorders", "Osteogenesis imperfecta", "Refsum disease"], answer: 1, exp: "mtDNA mutations impair oxidative phosphorylation, affecting high-energy tissues (muscles & nerves)." },
+            { id: 66, lessonId: 3, orig: 71, q: "Replicative segregation is a characteristic feature of:", options: ["Mitochondria", "Nucleus", "Nucleolus", "None of the above"], answer: 0, exp: "Replicative segregation occurs during mitochondrial division (heteroplasmy)." },
+            { id: 67, lessonId: 3, orig: 101, q: "In eukaryotes, which DNA polymerase is required for mitochondrial DNA replication?", options: ["DNA polymerase alpha", "DNA polymerase beta", "DNA polymerase delta", "DNA polymerase gamma"], answer: 3, exp: "DNA Polymerase Gamma (γ) is the mitochondrial DNA polymerase." },
+            { id: 68, lessonId: 3, orig: 168, q: "The human mitochondrial DNA is:", options: ["Like nuclear DNA in structure", "Single stranded, linear", "Double stranded, circular", "Single stranded, circular"], answer: 2, exp: "Human mtDNA is double-stranded and circular." },
+
+            // --- LESSON 4 (37 Qs) ---
+            { id: 69, lessonId: 4, orig: 4, q: "In prokaryotes, the lagging strand is synthesized by which enzyme?", options: ["DNA polymerase I", "DNA polymerase III", "DNA polymerase II", "DNA polymerase V"], answer: 1, exp: "DNA Polymerase III synthesizes both leading and lagging strands in prokaryotes." },
+            { id: 70, lessonId: 4, orig: 24, q: "Cohesion of DNA is disturbed during which cellular phase?", options: ["Replication", "Translation", "Transcription", "Regulation of transcription"], answer: 0, exp: "DNA replication fork passage requires unwinding and cohesion remodeling." },
+            { id: 71, lessonId: 4, orig: 28, q: "Which of the following forms RNA primers in Eukaryotes?", options: ["Primase", "DNA polymerase alpha (Pol α / primase complex)", "DNA polymerase delta", "DNA polymerase epsilon"], answer: 1, exp: "Pol α / primase complex synthesizes short RNA-DNA primers in eukaryotes." },
+            { id: 72, lessonId: 4, orig: 29, q: "Prokaryotic DNA repair involves which enzyme?", options: ["DNA polymerase II", "DNA ligase", "DNA polymerase I", "All of the above"], answer: 0, exp: "Pol II (and Pol I) plays key roles in prokaryotic DNA repair." },
+            { id: 73, lessonId: 4, orig: 43, q: "In eukaryotic cells, the leading strand is synthesized primarily by:", options: ["DNA polymerase alpha", "DNA polymerase beta", "DNA polymerase epsilon", "DNA polymerase gamma"], answer: 2, exp: "DNA Polymerase Epsilon (ε) synthesizes the leading strand in eukaryotic nuclear replication." },
+            { id: 74, lessonId: 4, orig: 44, q: "In prokaryotes, the leading strand is synthesized by:", options: ["DNA polymerase I", "DNA polymerase II", "DNA polymerase III", "DNA polymerase gamma"], answer: 2, exp: "DNA Pol III is the main replicative polymerase in bacteria." },
+            { id: 75, lessonId: 4, orig: 45, q: "In prokaryotes, the RNA primer is synthesized by:", options: ["DNA polymerase I", "Helicase", "Primase (DnaG)", "DNA polymerase gamma"], answer: 2, exp: "Primase (DnaG) synthesizes RNA primers in prokaryotes." },
+            { id: 76, lessonId: 4, orig: 50, q: "Cohesion protein cleavage/disturbance occurs during which phase of mitosis?", options: ["Prophase", "Metaphase", "Anaphase", "Telophase"], answer: 2, exp: "Cohesin is cleaved by separase during Anaphase to separate sister chromatids." },
+            { id: 77, lessonId: 4, orig: 88, q: "Which of the following is a fundamental feature of DNA replication?", options: ["Semi-conservative", "Discontinuous on both strands", "Unidirectional", "DNA ligases build the new strand"], answer: 0, exp: "DNA replication is semi-conservative and semi-discontinuous." },
+            { id: 78, lessonId: 4, orig: 89, q: "In DNA replication, each daughter molecule contains one parental strand and one new strand. This is termed:", options: ["Mutational", "Semiconservative", "Discontinuous", "Conservative"], answer: 1, exp: "Semi-conservative replication model (Meselson-Stahl)." },
+            { id: 79, lessonId: 4, orig: 90, q: "DNA chain elongation during replication occurs strictly in which direction?", options: ["3' to 5'", "5' to 3'", "Randomly", "Varies per organism"], answer: 1, exp: "All DNA polymerases add nucleotides exclusively in 5' to 3' direction." },
+            { id: 80, lessonId: 4, orig: 91, q: "Which enzyme unwinds the DNA double helix at the replication fork?", options: ["Helicase", "Replicase", "Polymerase", "Ligase"], answer: 0, exp: "Helicase breaks hydrogen bonds to unwind the double helix." },
+            { id: 81, lessonId: 4, orig: 92, q: "Which enzyme catalyzes the elongation of DNA chains?", options: ["DNA polymerase", "Helicase", "DNA ligase", "Primase"], answer: 0, exp: "DNA Polymerase adds deoxyribonucleotides to the 3'-OH end." },
+            { id: 82, lessonId: 4, orig: 93, q: "Formation of RNA primer:", options: ["Precedes replication", "Follows replication", "Precedes transcription", "Follows transcription"], answer: 0, exp: "RNA primer synthesis is necessary BEFORE DNA polymerase can elongate." },
+            { id: 83, lessonId: 4, orig: 94, q: "What molecule serves as the essential primer for DNA polymerase during replication?", options: ["Five carbon sugars", "Deoxyribose alone", "A short RNA molecule", "Proteins with free hydroxyl"], answer: 2, exp: "DNA polymerases require a free 3'-OH group provided by a short RNA primer." },
+            { id: 84, lessonId: 4, orig: 95, q: "After formation of replication fork:", options: ["Both strands synthesized discontinuously", "One strand continuously and the other discontinuously", "Both strands continuously", "Primer required for only one strand"], answer: 1, exp: "Leading strand is continuous; lagging strand is discontinuous (semi-discontinuous)." },
+            { id: 85, lessonId: 4, orig: 96, q: "Okazaki fragments are formed during synthesis of:", options: ["mRNA", "tRNA", "rRNA", "DNA (Lagging strand)"], answer: 3, exp: "Okazaki fragments are short DNA segments formed on lagging strand." },
+            { id: 86, lessonId: 4, orig: 97, q: "DNA replication in eukaryotic cell cycle occurs specifically in:", options: ["G1 phase", "S phase", "G2 phase", "M phase"], answer: 1, exp: "Nuclear DNA replication occurs exclusively during S (Synthesis) phase." },
+            { id: 87, lessonId: 4, orig: 98, q: "The process of eukaryotic DNA replication involves:", options: ["Multiple origins of replication per chromosome", "Binding of ribosomes to origins", "Continuous synthesis on both strands", "Conservative replication"], answer: 0, exp: "Eukaryotic chromosomes have multiple origins of replication (ORCs)." },
+            { id: 88, lessonId: 4, orig: 99, q: "During replication, Single-Stranded Binding Proteins (SSBPs):", options: ["Catalyze RNA primer synthesis", "Proofread via 3'-5' exonuclease", "Stabilize single-stranded DNA preventing re-annealing", "Eliminate supercoiling"], answer: 2, exp: "SSBs bind single strands to keep them separated and protect them from nucleases." },
+            { id: 89, lessonId: 4, orig: 100, q: "The short strand of ________ primer is required for initiation of DNA synthesis:", options: ["DNA", "RNA", "Histone", "Protein"], answer: 1, exp: "RNA primer synthesized by primase." },
+            { id: 90, lessonId: 4, orig: 102, q: "The DNA polymerase involved in leading strand synthesis in eukaryotes is:", options: ["DNA polymerase alpha", "DNA polymerase beta", "DNA polymerase delta", "DNA polymerase epsilon"], answer: 3, exp: "Pol ε synthesizes leading strand; Pol δ synthesizes lagging strand." },
+            { id: 91, lessonId: 4, orig: 103, q: "The enzyme responsible for removal of RNA primers in eukaryotic replication is:", options: ["DNA polymerase alpha", "RNA primase", "DNA polymerase delta", "RNase H (and FEN1)"], answer: 3, exp: "RNase H hydrolyzes RNA primers, and FEN1 removes flaps." },
+            { id: 92, lessonId: 4, orig: 104, q: "The nicks between Okazaki fragments are eventually sealed by:", options: ["Gyrase", "DNA ligase", "Polymerase", "Helicase"], answer: 1, exp: "DNA ligase forms phosphodiester bonds to seal nicks." },
+            { id: 93, lessonId: 4, orig: 105, q: "What is the primary role of Topoisomerases in DNA replication?", options: ["Relieve torsional strain/supercoiling by cutting and resealing DNA", "Bind to replication origin", "Unwind double helix", "Join Okazaki fragments"], answer: 0, exp: "Topoisomerases (Gyrase) relieve positive supercoiling ahead of the replication fork." },
+            { id: 94, lessonId: 4, orig: 106, q: "What is the primary function of DNA ligase?", options: ["Works on leading strand only", "Undoes DNA polymerase activity", "Joins Okazaki fragments", "Winds strands together"], answer: 2, exp: "DNA ligase seals phosphodiester backbone gaps between Okazaki fragments." },
+            { id: 95, lessonId: 4, orig: 169, q: "Regarding eukaryotic DNA polymerases, which statement is INCORRECT?", options: ["Pol alpha forms complex with primase", "Pol beta is concerned with DNA repair", "Pol gamma replicates mitochondrial DNA", "Pol epsilon catalyzes removal of RNA primers"], answer: 3, exp: "Pol epsilon does NOT remove primers; RNase H and FEN1 perform primer removal." },
+            { id: 96, lessonId: 4, orig: 170, q: "The direction of enzymatic DNA synthesis is always:", options: ["5' to 3'", "3' to 5'", "Random", "Organism dependent"], answer: 0, exp: "All DNA polymerases add nucleotides to the 3'-OH end (5'->3')." },
+            { id: 97, lessonId: 4, orig: 171, q: "One of the following is NOT involved in prokaryotic replication:", options: ["DNA polymerase III", "DNA polymerase I", "Primase", "Telomerase"], answer: 3, exp: "Prokaryotes have circular DNA, so they do NOT require Telomerase." },
+            { id: 98, lessonId: 4, orig: 173, q: "As regard eukaryotic DNA polymerases:", options: ["Polymerase beta synthesizes mitochondrial DNA", "Polymerase delta synthesizes leading strand", "Polymerase epsilon excises RNA primer", "Polymerase alpha synthesizes RNA primer"], answer: 3, exp: "Polymerase α/primase complex synthesizes the RNA-DNA primer." },
+            { id: 99, lessonId: 4, orig: 174, q: "In prokaryotes, DNA polymerase III is responsible for:", options: ["Leading strand synthesis", "Lagging strand synthesis", "DNA repair", "Both a and b"], answer: 3, exp: "Pol III synthesizes BOTH leading and lagging strands in bacteria." },
+            { id: 100, lessonId: 4, orig: 175, q: "Prokaryotic RNA primer is synthesized by:", options: ["DNA polymerase alpha", "DNA polymerase III", "Primase (DnaG)", "Telomerase"], answer: 2, exp: "Primase synthesizes bacterial RNA primers." },
+            { id: 101, lessonId: 4, orig: 176, q: "Which of the following is NOT required in base excision DNA repair?", options: ["Endonuclease", "Exonuclease", "Topoisomerase", "Repair DNA polymerase"], answer: 2, exp: "Topoisomerases are not directly required for localized DNA repair excision pathways." },
+            { id: 102, lessonId: 4, orig: 177, q: "The enzyme responsible for removal of RNA primers during PROKARYOTIC replication is:", options: ["DNA polymerase I (5'->3' exonuclease)", "RNA primase", "DNA polymerase III", "RNase H"], answer: 0, exp: "DNA Polymerase I uses its 5'->3' exonuclease activity to remove primers in prokaryotes." },
+            { id: 103, lessonId: 4, orig: 178, q: "Eukaryotes differ from prokaryotes in DNA replication mechanism by:", options: ["Use of DNA primer rather than RNA primer", "Using different enzymes for leading (Pol ε) and lagging (Pol δ) strands", "Discontinuous rather than semi-discontinuous", "Unidirectional replication"], answer: 1, exp: "Eukaryotes use distinct polymerases (Pol ε for leading, Pol δ for lagging)." },
+            { id: 104, lessonId: 4, orig: 179, q: "The enzyme used to join nicks in the sugar-phosphate backbone of DNA is:", options: ["DNA polymerase", "DNA ligase", "Endonuclease", "Primase"], answer: 1, exp: "DNA ligase joins nicks." },
+            { id: 105, lessonId: 4, orig: 180, q: "Okazaki fragments occur on the ________ strand and are bonded together by ________:", options: ["Leading strand, polymerase", "mRNA, anticodons", "Lagging strand, ligase", "tRNA, polymerase"], answer: 2, exp: "Okazaki fragments occur on lagging strand and are sealed by DNA ligase." },
+
+            // --- LESSON 5 (8 Qs) ---
+            { id: 106, lessonId: 5, orig: 1, q: "Telomeric 3' overhang consists of repetitive sequences rich in Guanine bases (TTAGGG):", options: ["False", "True"], answer: 1, exp: "Human telomeres consist of G-rich tandem repeats (5'-TTAGGG-3')." },
+            { id: 107, lessonId: 5, orig: 7, q: "Telomere shortening occurs primarily in:", options: ["Normal somatic cell divisions / Ageing", "Up-regulation", "Embryonic stem cells", "Cancers"], answer: 0, exp: "Telomeres shorten with age and repeated somatic cell division." },
+            { id: 108, lessonId: 5, orig: 23, q: "Stability and protection of chromosome terminal ends is offered by:", options: ["Telomeres", "Histone core", "Centromere", "Nucleolus"], answer: 0, exp: "Telomeres cap and protect linear chromosome ends from degradation." },
+            { id: 109, lessonId: 5, orig: 46, q: "In eukaryotes, telomeric ends of linear chromosomes are maintained by:", options: ["Topoisomerase", "Telomerase", "DNA polymerase III", "DNA polymerase II"], answer: 1, exp: "Telomerase enzyme extends telomeric repetitive DNA." },
+            { id: 110, lessonId: 5, orig: 107, q: "What is the term for repetitive DNA structures at the tips of eukaryotic chromosomes?", options: ["Kinetochore", "Telomere", "Centriole", "Chromomere"], answer: 1, exp: "Telomeres." },
+            { id: 111, lessonId: 5, orig: 108, q: "Reverse transcriptase activity is present in which eukaryotic enzyme?", options: ["DNA polymerase alpha", "DNA polymerase gamma", "Telomerase (TERT component)", "DNA polymerase delta"], answer: 2, exp: "Telomerase is a ribonucleoprotein with Reverse Transcriptase (TERT) activity." },
+            { id: 112, lessonId: 5, orig: 109, q: "Which of the following accurately describes the enzyme Telomerase?", options: ["It is a reverse transcriptase enzyme", "It carries an internal RNA sequence serving as template", "It translocates to synthesize tandem repeats", "All of the above"], answer: 3, exp: "Telomerase uses its internal RNA template to synthesize telomeric repeats via reverse transcription." },
+            { id: 113, lessonId: 5, orig: 172, q: "One of the following is NOT a characteristic of Telomerase:", options: ["Present in eukaryotic cells", "Contains an internal RNA template", "Acts as reverse transcriptase", "Elongates the 5' end of leading strand"], answer: 3, exp: "Telomerase elongates the 3' overhang end of chromosome strands." },
+
+            // --- LESSON 6 (25 Qs) ---
+            { id: 114, lessonId: 6, orig: 9, q: "In eukaryotes, major ribosomal RNAs (18S, 28S, 5.8S) are synthesized by:", options: ["RNA Polymerase alpha", "RNA Polymerase II", "RNA Polymerase I", "RNA Polymerase III"], answer: 2, exp: "RNA Polymerase I transcribes rRNA genes (18S, 5.8S, 28S)." },
+            { id: 115, lessonId: 6, orig: 13, q: "First step in pre-initiation complex assembly during Eukaryotic transcription is binding of:", options: ["TFIIA", "TFIIB", "TFIID (TBP subunit)", "TFIIH"], answer: 2, exp: "TFIID binds first to the TATA box." },
+            { id: 116, lessonId: 6, orig: 14, q: "Transcription factors regulate gene expression by:", options: ["Binding DNA regulatory elements to control transcription", "Binding to silencers only", "Exporting DNA out of nucleus", "Terminating via rho mechanism"], answer: 0, exp: "Transcription factors bind promoters/enhancers to regulate RNA polymerase activity." },
+            { id: 117, lessonId: 6, orig: 20, q: "What is the primary significance of the TATA box in eukaryotic gene expression?", options: ["Control frequency of transcription", "Basal regulation to position RNA polymerase for initiation", "Facilitate ribosomal binding", "Enhance translation"], answer: 1, exp: "TATA box serves as basal promoter element for transcription initiation location." },
+            { id: 118, lessonId: 6, orig: 22, q: "Initiation of transcription elongation in Eukaryotes is triggered by RNA Pol II:", options: ["Carboxylation", "Oxidation", "Phosphorylation (of CTD domain)", "Hydroxylation"], answer: 2, exp: "TFIIH phosphorylates the C-Terminal Domain (CTD) of RNA Polymerase II." },
+            { id: 119, lessonId: 6, orig: 26, q: "Key general transcription factor involved in TATA box recognition in eukaryotes is:", options: ["Independent of factors", "Sigma factor", "TFIID", "Helicase"], answer: 2, exp: "TFIID contains TBP (TATA-binding protein)." },
+            { id: 120, lessonId: 6, orig: 47, q: "In prokaryotes, all major types of RNA (mRNA, tRNA, rRNA) are synthesized by:", options: ["RNA polymerase I", "RNA polymerase II", "RNA polymerase III", "Single type of RNA polymerase"], answer: 3, exp: "Prokaryotes use a single RNA polymerase species for all transcription." },
+            { id: 121, lessonId: 6, orig: 48, q: "Sigma factor of bacterial RNA polymerase is responsible for:", options: ["Specific binding of holoenzyme to promoter region", "Termination of RNA synthesis", "Elongation of RNA strand", "None of the above"], answer: 0, exp: "Sigma factor directs RNA polymerase holoenzyme to promoter sequences." },
+            { id: 122, lessonId: 6, orig: 49, q: "Rho factor in prokaryotes is responsible for:", options: ["Promoter recognition", "Termination of RNA synthesis", "Elongation of RNA", "Capping"], answer: 1, exp: "Rho factor mediates transcription termination (Rho-dependent termination)." },
+            { id: 123, lessonId: 6, orig: 110, q: "Which of the following best describes transcription?", options: ["RNA synthesis is always in the 5'-3' direction", "RNA polymerase needs a primer to initiate", "mRNA sequence is identical to template strand", "RNA polymerase uses dATP, dGTP"], answer: 0, exp: "RNA synthesis proceeds strictly 5' to 3' without requiring a primer." },
+            { id: 124, lessonId: 6, orig: 111, q: "mRNA sequence is complementary to the nucleotide sequence of the:", options: ["Coding strand", "Ribosomal RNA", "tRNA", "Template (Antisense) strand"], answer: 3, exp: "mRNA is complementary to the template strand (and identical to coding strand)." },
+            { id: 125, lessonId: 6, orig: 112, q: "What is the key function of helicase activity during transcription?", options: ["Relief of supercoiling", "Separation of two strands of DNA to form transcription bubble", "Synthesis of primers", "Re-annealing DNA"], answer: 1, exp: "Helicase activity unwinds double-stranded DNA." },
+            { id: 126, lessonId: 6, orig: 113, q: "What is a promoter?", options: ["DNA sequence where DNA pol binds", "Specific DNA sequence to which RNA polymerase binds", "Restriction site", "RNA sequence"], answer: 1, exp: "Promoter is the DNA region that recruits RNA polymerase." },
+            { id: 127, lessonId: 6, orig: 114, q: "What is the role of the promoter region in gene expression regulation?", options: ["Inhibit expression", "Recruit RNA polymerase and transcription factors to DNA", "Alternative splicing", "DNA repair"], answer: 1, exp: "Promoter recruits transcription machinery." },
+            { id: 128, lessonId: 6, orig: 115, q: "The region of DNA known as TATA BOX is the binding site for:", options: ["DNA polymerase", "Topoisomerase", "RNA polymerase (via TBP/TFIID)", "DNA ligase"], answer: 2, exp: "TATA box binds TBP subunit of TFIID to position RNA Polymerase." },
+            { id: 129, lessonId: 6, orig: 116, q: "In eukaryotes, synthesis of mRNA is catalyzed by:", options: ["RNA polymerase I", "RNA polymerase II", "RNA polymerase III", "DNA polymerase I"], answer: 1, exp: "RNA Polymerase II transcribes all protein-coding genes (mRNA)." },
+            { id: 130, lessonId: 6, orig: 117, q: "Eukaryotic 18S and 28S rRNA genes are transcribed by:", options: ["RNA polymerase III", "RNA-dependent RNA pol", "RNA polymerase I", "RNA polymerase II"], answer: 2, exp: "RNA Polymerase I." },
+            { id: 131, lessonId: 6, orig: 118, q: "In eukaryotes, the TATA sequence functions as:", options: ["Start site for replication", "Promoter signal for starting transcription", "Termination signal", "Polyadenylation signal"], answer: 1, exp: "TATA box indicates transcription start location." },
+            { id: 132, lessonId: 6, orig: 181, q: "Rho-dependent termination in prokaryotic transcription is recognized by:", options: ["alpha subunit", "beta subunit", "Sigma factor", "Rho factor"], answer: 3, exp: "Rho factor protein." },
+            { id: 133, lessonId: 6, orig: 182, q: "The role of sigma factor in bacterial RNA polymerase is:", options: ["Catalyze phosphodiester bonds", "Position RNA polymerase correctly on promoter DNA", "Terminate synthesis", "Unwind DNA"], answer: 1, exp: "Sigma factor confers promoter specificity." },
+            { id: 134, lessonId: 6, orig: 183, q: "Sigma and Rho factors are required for prokaryotic:", options: ["Replication", "Transcription", "Translation", "Polymerization"], answer: 1, exp: "Transcription initiation (Sigma) and termination (Rho)." },
+            { id: 135, lessonId: 6, orig: 184, q: "In eukaryotic promoters, the 'TATA box' is also known as:", options: ["5' UTR", "-10 box / Gold-Hogness box", "-35 box", "Terminator"], answer: 1, exp: "TATA box (-25 in eukaryotes, -10 Pribnow box in prokaryotes)." },
+            { id: 136, lessonId: 6, orig: 185, q: "Prokaryotic RNA polymerase does NOT synthesize:", options: ["tRNA", "mRNA", "rRNA", "RNA primer"], answer: 3, exp: "RNA primers are synthesized by Primase (DnaG), not RNA polymerase." },
+            { id: 137, lessonId: 6, orig: 186, q: "TBP stands for:", options: ["TATA box polymerase", "TATA-box binding protein", "Transcription associated factor", "Transcription binding protein"], answer: 1, exp: "TBP = TATA-box Binding Protein." },
+            { id: 138, lessonId: 6, orig: 187, q: "General transcription factors required by eukaryotic RNA polymerases are termed:", options: ["Basal or general transcription factors", "Activators", "Accessory factors", "Elongation factors"], answer: 0, exp: "Basal (general) transcription factors (TFIIA, TFIIB, TFIID, etc.)." },
+
+            // --- LESSON 7 (14 Qs) ---
+            { id: 139, lessonId: 7, orig: 8, q: "Function of 5' capping in eukaryotic mRNA is important for:", options: ["Initiating transcription", "Promoting degradation", "Enhancing mRNA stability & ribosome binding", "Facilitating splicing only"], answer: 2, exp: "5' Cap protects mRNA from 5' exonucleases and assists translation initiation." },
+            { id: 140, lessonId: 7, orig: 10, q: "Alternative splicing occurs during post-transcriptional processing of:", options: ["snRNA", "rRNA", "tRNA", "mRNA"], answer: 3, exp: "Alternative splicing occurs on pre-mRNA." },
+            { id: 141, lessonId: 7, orig: 11, q: "Cleavage and Polyadenylation Specificity Factor (CPSF) binds to which sequence?", options: ["TATAAA", "AAUAAA", "CCAATC", "TTGACA"], answer: 1, exp: "CPSF recognizes the polyadenylation signal sequence 5'-AAUAAA-3'." },
+            { id: 142, lessonId: 7, orig: 19, q: "Alternative splicing mechanism leads to:", options: ["RNA degradation", "Protein diversity (isoforms)", "Chromatin condensation", "Excision of exons"], answer: 1, exp: "Alternative splicing generates multiple protein isoforms from a single gene." },
+            { id: 143, lessonId: 7, orig: 21, q: "Post-transcriptional capping process involves addition of:", options: ["3-methyl guanine cap", "3-methyl cytosine cap", "7-methylguanosine (5'-5' triphosphate cap)", "5-methyl cytosine cap"], answer: 2, exp: "7-Methylguanosine cap linked 5' to 5' via triphosphate bridge." },
+            { id: 144, lessonId: 7, orig: 25, q: "Which of the following is correct regarding eukaryotic RNA splicing?", options: ["It means adding introns", "Requires U-rich snRNPs (snRNAs) forming spliceosome", "Does not require snRNA", "Identical to tRNA 5' trimming"], answer: 1, exp: "Splicing is carried out by spliceosomes composed of U-rich snRNPs (U1, U2, U4, U5, U6)." },
+            { id: 145, lessonId: 7, orig: 51, q: "RNA processing in eukaryotes includes which of the following steps?", options: ["5' Capping", "Adding poly(A) tail", "Splicing of introns", "All of the above"], answer: 3, exp: "Pre-mRNA processing includes 5' capping, polyadenylation, and intron splicing." },
+            { id: 146, lessonId: 7, orig: 52, q: "The coding regions of eukaryotic pre-mRNA are called:", options: ["Introns", "Exons", "Palindromes", "Promoters"], answer: 1, exp: "Exons are coding sequences retained in mature mRNA." },
+            { id: 147, lessonId: 7, orig: 119, q: "Processing of eukaryotic mRNA LACKS which modification?", options: ["Capping", "Polyadenylation", "Splicing", "Trimming"], answer: 3, exp: "Trimming occurs in tRNA processing; mRNA undergoes capping, polyadenylation, splicing." },
+            { id: 148, lessonId: 7, orig: 120, q: "What macromolecular complex removes introns during pre-mRNA splicing?", options: ["Splicer", "Ribosomes", "Nuclear body", "Spliceosomes"], answer: 3, exp: "Spliceosome complex." },
+            { id: 149, lessonId: 7, orig: 125, q: "The linkage connecting the 5'-cap structure to eukaryotic mRNA is a:", options: ["3'-5' phosphodiester bridge", "5'-5' triphosphate bridge", "3'-3' triphosphate bridge", "3'-5' triphosphate bridge"], answer: 1, exp: "7-methylguanosine is linked via an unusual 5'-to-5' triphosphate bridge." },
+            { id: 150, lessonId: 7, orig: 126, q: "Which sequence feature protects eukaryotic mRNA 3'-end from degradation?", options: ["Telomeres", "Poly(A) tail", "Introns", "Exons"], answer: 1, exp: "Poly(A) tail protects 3'-end from nucleases." },
+            { id: 151, lessonId: 7, orig: 127, q: "mRNA splicing involves:", options: ["Cutting of exons and joining introns", "Action of RNA polymerase", "Action of DNA ligase", "Excision of introns and ligation of exons"], answer: 3, exp: "Introns are spliced out; exons are joined together." },
+            { id: 152, lessonId: 7, orig: 128, q: "Mature mammalian cytoplasmic mRNA is LEAST likely to contain:", options: ["5' cap structure", "3' poly A tail", "Exon", "Intron"], answer: 3, exp: "Introns are removed during nuclear splicing and absent in mature mRNA." },
+
+            // --- LESSON 8 (23 Qs) ---
+            { id: 153, lessonId: 8, orig: 2, q: "Which of the following is the standard initiation codon?", options: ["UUG", "AUU", "AUC", "AUG"], answer: 3, exp: "AUG is the universal start codon." },
+            { id: 154, lessonId: 8, orig: 27, q: "AUG is the initiation codon for which amino acid?", options: ["Methionine", "Histidine", "Alanine", "Leucine"], answer: 0, exp: "AUG codes for Methionine." },
+            { id: 155, lessonId: 8, orig: 42, q: "Number of nucleotide bases that form a single codon is:", options: ["2 bases", "3 bases", "4 bases", "5 bases"], answer: 1, exp: "Codons are triplets of 3 nitrogenous bases." },
+            { id: 156, lessonId: 8, orig: 54, q: "The standard termination (stop) codons are:", options: ["UAA, UAG, UGA", "AUU, AUG, UAA", "UAA, UAG, AGA", "UAG, UAG, UGA"], answer: 0, exp: "UAA (ochre), UAG (amber), UGA (opal)." },
+            { id: 157, lessonId: 8, orig: 55, q: "During protein synthesis:", options: ["Amino acid recognizes codon directly", "Amino acid binds rRNA first", "Single tRNA carries all amino acids", "Every amino acid binds specific tRNA with specific anticodon"], answer: 3, exp: "Aminoacyl-tRNA synthetase attaches amino acid to specific tRNA with complementary anticodon." },
+            { id: 158, lessonId: 8, orig: 73, q: "AUG is the specific codon for:", options: ["Tryptophan", "Glycine", "Methionine", "Alanine"], answer: 2, exp: "Methionine." },
+            { id: 159, lessonId: 8, orig: 81, q: "On which of the following molecules would you find a codon?", options: ["Messenger RNA", "Ribosomal RNA", "Transfer RNA", "DNA"], answer: 0, exp: "Codons are located on mRNA." },
+            { id: 160, lessonId: 8, orig: 121, q: "Which of the following processes is ABSENT in the eukaryotic cell nucleus?", options: ["Transcription", "Translation", "Removal of introns", "DNA replication"], answer: 1, exp: "Translation occurs exclusively in the cytoplasm/RER." },
+            { id: 161, lessonId: 8, orig: 122, q: "The genetic code lacks which of the following features?", options: ["Codon consists of 3 bases", "Single amino acid can have multiple codons", "Universal code", "Single codon can code for multiple different amino acids"], answer: 3, exp: "The genetic code is unambiguous: 1 codon codes for ONLY 1 specific amino acid." },
+            { id: 162, lessonId: 8, orig: 123, q: "Presence of multiple codons for a single amino acid describes which feature of genetic code?", options: ["Degenerate / Redundant", "Duplicative", "Non-overlapping", "Overlapping"], answer: 0, exp: "Degeneracy means multiple codons specify the same amino acid." },
+            { id: 163, lessonId: 8, orig: 124, q: "Non-standard base pairing flexibility at the 3rd codon / 1st anticodon position is called:", options: ["Degeneracy", "Wobble hypothesis", "Central dogma", "Alternative splicing"], answer: 1, exp: "Crick's Wobble Hypothesis." },
+            { id: 164, lessonId: 8, orig: 129, q: "AUG codon is crucial as:", options: ["Releasing factor", "Termination codon", "tRNA recognition site", "Polypeptide chain initiating codon"], answer: 3, exp: "Initiator codon." },
+            { id: 165, lessonId: 8, orig: 130, q: "Chain termination codons in protein biosynthesis are:", options: ["UAA, UAG and UGA", "UGG, UGU and AGU", "AAU, AAG and GAU", "GCG, GCA and GCU"], answer: 0, exp: "UAA, UAG, UGA." },
+            { id: 166, lessonId: 8, orig: 131, q: "Codons are present in:", options: ["Template strand of DNA", "mRNA", "tRNA", "rRNA"], answer: 1, exp: "mRNA." },
+            { id: 167, lessonId: 8, orig: 132, q: "Transfer RNA (tRNA) functions to:", options: ["Transfer DNA to ribosome", "Transfer mRNA to cytosol", "Transfer specific amino acids from cytosol to ribosome", "Transfer proteins"], answer: 2, exp: "tRNA delivers amino acids to the ribosome." },
+            { id: 168, lessonId: 8, orig: 133, q: "Which best defines a codon?", options: ["Protein initiating transcription", "Free base", "Triplet code of three bases on mRNA specifying one amino acid", "Hydrogen bond"], answer: 2, exp: "Codon = 3 mRNA bases." },
+            { id: 169, lessonId: 8, orig: 134, q: "Which of the following is IRRELEVANT to protein translation?", options: ["Ribosomes", "Peptidyl transferase", "Spliceosome", "Aminoacyl-tRNA synthetase"], answer: 2, exp: "Spliceosome functions in RNA splicing, not translation." },
+            { id: 170, lessonId: 8, orig: 135, q: "The sequence of amino acids in a polypeptide chain corresponds to the sequence of:", options: ["mRNA codons", "tRNA nucleotides", "rRNA anticodons", "rRNA nucleotides"], answer: 0, exp: "Colinearity: mRNA codons determine amino acid sequence." },
+            { id: 171, lessonId: 8, orig: 136, q: "The initiating aminoacyl-tRNA in EUKARYOTES is:", options: ["Methionyl-tRNA (Met-tRNAi)", "Formylmethionyl-tRNA (fMet-tRNA)", "Tyrosinyl-tRNA", "Alanyl-tRNA"], answer: 0, exp: "Eukaryotes use unformylated Methionyl-tRNA; prokaryotes use fMet-tRNA." },
+            { id: 172, lessonId: 8, orig: 137, q: "During translation, formation of peptide bond between amino acids is catalyzed by:", options: ["Peptidyl transferase", "Glucosyl transferase", "Peptidyl polymerase", "Aminoacyl tRNA synthetase"], answer: 0, exp: "Peptidyl transferase ribozyme activity." },
+            { id: 173, lessonId: 8, orig: 138, q: "Peptidyl transferase activity in eukaryotic ribosome is located in:", options: ["40S subunit", "60S subunit (28S rRNA)", "eEF-2", "Aminoacyl tRNA"], answer: 1, exp: "28S rRNA of the large 60S ribosomal subunit." },
+            { id: 174, lessonId: 8, orig: 156, q: "The codon is found on ________, and the anticodon is found on ________:", options: ["mRNA, tRNA", "tRNA, mRNA", "rRNA, tRNA", "mRNA, rRNA"], answer: 0, exp: "Codon on mRNA, Anticodon on tRNA." },
+            { id: 175, lessonId: 8, orig: 188, q: "The first codon translated on mRNA is usually:", options: ["AUG", "GGU", "GGA", "AAA"], answer: 0, exp: "AUG." },
+
+            // --- LESSON 9 (6 Qs) ---
+            { id: 176, lessonId: 9, orig: 56, q: "Post-translational modifications of proteins include:", options: ["Proteolytic trimming", "Glycosylation", "Hydroxylation", "All of the above"], answer: 3, exp: "Post-translational processing includes trimming, phosphorylation, glycosylation, hydroxylation." },
+            { id: 177, lessonId: 9, orig: 139, q: "Post-translational processing includes:", options: ["5'-capping", "Trimming of precursor peptides", "3'-polyadenylation", "Splicing"], answer: 1, exp: "Proteolytic trimming (e.g. zymogen activation). Capping/polyA/splicing are post-transcriptional." },
+            { id: 178, lessonId: 9, orig: 140, q: "Activation of inactive trypsinogen into active trypsin in small intestine is an example of:", options: ["Trimming (Proteolytic cleavage)", "Phosphorylation", "Glycosylation", "Carboxylation"], answer: 0, exp: "Zymogen cleavage/trimming." },
+            { id: 179, lessonId: 9, orig: 141, q: "Prolyl and lysyl residues in collagen are modified post-translationally by:", options: ["Phosphorylation", "Glycosylation", "Hydroxylation", "Carboxylation"], answer: 2, exp: "Prolyl and Lysyl Hydroxylation (requires Vitamin C)." },
+            { id: 180, lessonId: 9, orig: 142, q: "Which post-translational modification allows blood clotting proteins to bind Calcium (Ca2+)?", options: ["Phosphorylation", "Glycosylation", "Hydroxylation", "Gamma-Carboxylation of glutamate"], answer: 3, exp: "Gamma-carboxylation of glutamate residues (Vitamin K dependent)." },
+            { id: 181, lessonId: 9, orig: 189, q: "Phosphorylation of regulatory proteins typically occurs at which amino acid residues?", options: ["Cysteine residues", "Serine (also Threonine & Tyrosine) residues", "Histidine residues", "Alanine residues"], answer: 1, exp: "Serine, Threonine, and Tyrosine hydroxyl groups are phosphorylated by kinases." },
+
+            // --- LESSON 10 (5 Qs) ---
+            { id: 182, lessonId: 10, orig: 15, q: "Which mechanism leads to epigenetic gene activation in eukaryotes?", options: ["RNA splicing", "Histone acetylation", "RNA degradation", "Enhanced translation"], answer: 1, exp: "Histone Acetylation relaxes chromatin (euchromatin) activating transcription." },
+            { id: 183, lessonId: 10, orig: 17, q: "DNA cytosine methylation in promoter regions of eukaryotes typically causes:", options: ["Increased gene expression", "Gene silencing / Repression", "Activation of expression", "Post-transcriptional processing"], answer: 1, exp: "Hypermethylation of CpG islands causes gene silencing." },
+            { id: 184, lessonId: 10, orig: 18, q: "DNA cis-acting regulatory elements that decrease the rate of transcription are called:", options: ["Terminators", "Silencers", "Enhancers", "Promoters"], answer: 1, exp: "Silencer elements bind repressors to decrease transcription." },
+            { id: 185, lessonId: 10, orig: 57, q: "The vast diversity of antibody immunoglobulins is primarily generated by:", options: ["Gene amplification", "Gene rearrangement (V(D)J Recombination)", "Gene diminution", "Epigenetics"], answer: 1, exp: "Somatic V(D)J recombination." },
+            { id: 186, lessonId: 10, orig: 58, q: "Post-transcriptional gene regulation mechanisms include:", options: ["Alternative splicing", "Methylation of cytosine", "Acetylation of histone", "All of the above"], answer: 0, exp: "Alternative splicing is post-transcriptional. DNA methylation and histone acetylation are pre-transcriptional/epigenetic." },
+
+            // --- LESSON 11 (3 Qs) ---
+            { id: 187, lessonId: 11, orig: 3, q: "Apoptosis is triggered when pro-apoptotic BAX gene is activated:", options: ["True", "False"], answer: 0, exp: "BAX is a pro-apoptotic protein that forms pores in mitochondrial membrane." },
+            { id: 188, lessonId: 11, orig: 59, q: "Apoptosis is defined as:", options: ["Cell division", "Programmed cell death", "Inflammation of cell", "Necrosis"], answer: 1, exp: "Apoptosis = Programmed Cell Death." },
+            { id: 189, lessonId: 11, orig: 60, q: "p53 gene function:", options: ["Tumor suppressor gene", "Triggers apoptosis in response to DNA damage", "Arrests cell cycle at G1/S checkpoint", "All of the above"], answer: 3, exp: "p53 is the 'Guardian of the Genome': arrests cell cycle, activates repair, or triggers apoptosis." }
+        ];
+
+        /* ==========================================================================
+           2. APPLICATION STATE MANAGEMENT & PERSISTENCE
+           ========================================================================== */
+        let state = {
+            quizMode: 'practice', // 'practice' (instant feedback) or 'exam' (submit at end)
+            timerOption: 'none',
+            activeQuizQuestions: [],
+            currentQuestionIndex: 0,
+            userAnswers: {},   // { questionId: selectedOptionIndex }
+            flaggedQuestions: new Set(),
+            userMistakesHistory: new Set(),
+            answeredHistory: new Set(),
+            quizStartTime: null,
+            timerInterval: null,
+            remainingSeconds: 0,
+            elapsedSeconds: 0,
+            activeFilterGrid: 'all',
+            activeReviewFilter: 'all',
+            activeQuizType: 'full' // 'lesson', 'full', 'random', 'mistakes'
+        };
+
+        // Load data from localStorage on start
+        function loadSavedState() {
+            try {
+                const savedMistakes = localStorage.getItem('imb_dr_mohamed_mistakes');
+                if (savedMistakes) {
+                    state.userMistakesHistory = new Set(JSON.parse(savedMistakes));
+                }
+                const savedAnswers = localStorage.getItem('imb_dr_mohamed_answered');
+                if (savedAnswers) {
+                    state.answeredHistory = new Set(JSON.parse(savedAnswers));
+                }
+            } catch(e) {
+                console.error("Local storage error:", e);
+            }
+        }
+
+        function saveStateToStorage() {
+            try {
+                localStorage.setItem('imb_dr_mohamed_mistakes', JSON.stringify([...state.userMistakesHistory]));
+                localStorage.setItem('imb_dr_mohamed_answered', JSON.stringify([...state.answeredHistory]));
+            } catch(e) {
+                console.error("Local storage save error:", e);
+            }
+        }
+
+        /* ==========================================================================
+           3. UI RENDERERS & NAVIGATION
+           ========================================================================== */
+        window.onload = function() {
+            loadSavedState();
+            renderLessonsGrid();
+            updateHomeStats();
+        };
+
+        function updateHomeStats() {
+            document.getElementById('home-stat-solved').innerText = state.answeredHistory.size;
+            document.getElementById('home-stat-mistakes').innerText = state.userMistakesHistory.size;
+            document.getElementById('mistakes-count-badge').innerText = `${state.userMistakesHistory.size} سؤال خاطئ`;
+        }
+
+        function renderLessonsGrid() {
+            const container = document.getElementById('lessons-grid');
+            container.innerHTML = '';
+
+            LESSONS_METADATA.forEach((lesson) => {
+                const lessonQs = ALL_QUESTIONS.filter(q => q.lessonId === lesson.id);
+                const solvedInLesson = lessonQs.filter(q => state.answeredHistory.has(q.id)).length;
+                const percentSolved = Math.round((solvedInLesson / lesson.count) * 100);
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl p-5 border border-slate-200 hover:border-teal-500 shadow-sm transition-all hover:shadow-md flex flex-col justify-between group cursor-pointer";
+                card.onclick = () => startQuiz('lesson', lesson.id);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full">الدرس ${lesson.id}</span>
+                            <span class="text-xs text-slate-400 font-semibold">${lesson.count} سؤال</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm group-hover:text-teal-700 transition-colors mb-3 leading-snug">${lesson.title}</h4>
+                    </div>
+                    
+                    <div>
+                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-2">
+                            <div class="bg-teal-600 h-full transition-all" style="width: ${percentSolved}%"></div>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                            <span>تم إنجاز: ${solvedInLesson}/${lesson.count}</span>
+                            <span class="font-bold text-teal-700">${percentSolved}%</span>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function setQuizMode(mode) {
+            state.quizMode = mode;
+            const btnPractice = document.getElementById('mode-btn-practice');
+            const btnExam = document.getElementById('mode-btn-exam');
+
+            if (mode === 'practice') {
+                btnPractice.className = "px-3 py-1.5 rounded-md font-semibold transition-all bg-white text-medical-700 shadow-sm";
+                btnExam.className = "px-3 py-1.5 rounded-md font-semibold transition-all text-slate-600 hover:text-slate-900";
+            } else {
+                btnExam.className = "px-3 py-1.5 rounded-md font-semibold transition-all bg-white text-medical-700 shadow-sm";
+                btnPractice.className = "px-3 py-1.5 rounded-md font-semibold transition-all text-slate-600 hover:text-slate-900";
+            }
+        }
+
+        function updateTimerSetting() {
+            state.timerOption = document.getElementById('timer-select').value;
+        }
+
+        /* ==========================================================================
+           4. QUIZ ENGINE LOGIC
+           ========================================================================== */
+        function startQuiz(type, param) {
+            state.activeQuizType = type;
+            state.userAnswers = {};
+            state.flaggedQuestions.clear();
+            state.currentQuestionIndex = 0;
+            state.elapsedSeconds = 0;
+
+            if (type === 'full') {
+                state.activeQuizQuestions = [...ALL_QUESTIONS];
+                document.getElementById('quiz-title-display').innerText = "الميدتيرم الشامل (Full Mid-Term Exam)";
+            } else if (type === 'lesson') {
+                const lessonMeta = LESSONS_METADATA.find(l => l.id === param);
+                state.activeQuizQuestions = ALL_QUESTIONS.filter(q => q.lessonId === param);
+                document.getElementById('quiz-title-display').innerText = lessonMeta.title;
+            } else if (type === 'random') {
+                const count = param || 20;
+                const shuffled = [...ALL_QUESTIONS].sort(() => 0.5 - Math.random());
+                state.activeQuizQuestions = shuffled.slice(0, count);
+                document.getElementById('quiz-title-display').innerText = `اختبار عشوائي (${count} سؤال)`;
+            } else if (type === 'mistakes') {
+                if (state.userMistakesHistory.size === 0) {
+                    showModal("لا يوجد أسئلة خاطئة!", "ممتاز جداً دكتور محمد! ليس لديك أي أسئلة خاطئة مسجلة في بنك الأخطاء حالياً.", null);
+                    return;
+                }
+                state.activeQuizQuestions = ALL_QUESTIONS.filter(q => state.userMistakesHistory.has(q.id));
+                document.getElementById('quiz-title-display').innerText = `إعادة حل بنك الأخطاء (${state.activeQuizQuestions.length} سؤال)`;
+            }
+
+            // Switch Screen
+            document.getElementById('screen-home').classList.add('hidden');
+            document.getElementById('screen-results').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+
+            // Setup Timer
+            setupTimer();
+
+            // Render
+            renderCurrentQuestion();
+            renderNavigatorGrid();
+        }
+
+        function setupTimer() {
+            clearInterval(state.timerInterval);
+            const timerBadge = document.getElementById('timer-badge');
+            const timerText = document.getElementById('timer-text');
+
+            if (state.timerOption === 'none') {
+                timerBadge.classList.add('hidden');
+                timerBadge.classList.remove('flex');
+            } else {
+                timerBadge.classList.remove('hidden');
+                timerBadge.classList.add('flex');
+                
+                if (state.timerOption === 'countup') {
+                    state.elapsedSeconds = 0;
+                    timerText.innerText = "00:00";
+                    state.timerInterval = setInterval(() => {
+                        state.elapsedSeconds++;
+                        const mins = String(Math.floor(state.elapsedSeconds / 60)).padStart(2, '0');
+                        const secs = String(state.elapsedSeconds % 60).padStart(2, '0');
+                        timerText.innerText = `${mins}:${secs}`;
+                    }, 1000);
+                } else {
+                    const durationMins = parseInt(state.timerOption);
+                    state.remainingSeconds = durationMins * 60;
+                    state.timerInterval = setInterval(() => {
+                        state.remainingSeconds--;
+                        state.elapsedSeconds++;
+                        if (state.remainingSeconds <= 0) {
+                            clearInterval(state.timerInterval);
+                            submitQuiz();
+                            showModal("انتهى الوقت!", "لقد انتهى وقت الاختبار المخصص وتم تصحيح الإجابات تلقائياً.", null);
+                        }
+                        const mins = String(Math.floor(state.remainingSeconds / 60)).padStart(2, '0');
+                        const secs = String(state.remainingSeconds % 60).padStart(2, '0');
+                        timerText.innerText = `${mins}:${secs}`;
+                    }, 1000);
+                }
+            }
+        }
+
+        function renderCurrentQuestion() {
+            const q = state.activeQuizQuestions[state.currentQuestionIndex];
+            const total = state.activeQuizQuestions.length;
+
+            document.getElementById('quiz-subtitle-display').innerText = `السؤال الحالي: ${state.currentQuestionIndex + 1} من ${total}`;
+            document.getElementById('q-lesson-badge').innerText = `Lesson ${q.lessonId}`;
+            document.getElementById('q-orig-id').innerText = `Orig. #${q.orig}`;
+            document.getElementById('question-text').innerText = `${state.currentQuestionIndex + 1}. ${q.q}`;
+
+            // Options
+            const optsContainer = document.getElementById('options-container');
+            optsContainer.innerHTML = '';
+
+            const selectedOpt = state.userAnswers[q.id];
+            const letters = ['a', 'b', 'c', 'd'];
+
+            q.options.forEach((optText, idx) => {
+                const isSelected = selectedOpt === idx;
+                const optBtn = document.createElement('div');
+                
+                let extraClasses = "border-slate-200 hover:border-teal-400 hover:bg-slate-50";
+                
+                // In Practice mode, show correct/wrong immediately if answered
+                if (state.quizMode === 'practice' && selectedOpt !== undefined) {
+                    if (idx === q.answer) {
+                        extraClasses = "border-emerald-500 bg-emerald-50 text-emerald-900 font-bold ring-1 ring-emerald-500";
+                    } else if (isSelected && idx !== q.answer) {
+                        extraClasses = "border-red-400 bg-red-50 text-red-900 ring-1 ring-red-400";
+                    }
+                } else if (isSelected) {
+                    extraClasses = "border-teal-600 bg-teal-50 text-teal-900 font-bold ring-2 ring-teal-600";
+                }
+
+                optBtn.className = `en-text p-4 rounded-xl border text-sm font-medium transition-all cursor-pointer flex items-center justify-between ${extraClasses}`;
+                optBtn.onclick = () => selectOption(q.id, idx);
+
+                optBtn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg ${isSelected ? 'bg-medical-700 text-white' : 'bg-slate-100 text-slate-600'} text-xs font-bold flex items-center justify-center uppercase shrink-0">
+                            ${letters[idx]}
+                        </span>
+                        <span>${optText}</span>
+                    </div>
+                    ${state.quizMode === 'practice' && selectedOpt !== undefined ? 
+                        (idx === q.answer ? '<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>' : 
+                        (isSelected ? '<i class="fa-solid fa-circle-xmark text-red-500 text-lg"></i>' : '')) : ''}
+                `;
+
+                optsContainer.appendChild(optBtn);
+            });
+
+            // Explanation box in Practice mode
+            const expBox = document.getElementById('explanation-box');
+            if (state.quizMode === 'practice' && selectedOpt !== undefined) {
+                expBox.classList.remove('hidden');
+                const isCorrect = selectedOpt === q.answer;
+                expBox.className = `mt-6 p-4 rounded-xl border transition-all animate-fade-in ${isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}`;
+                document.getElementById('explanation-title').innerHTML = isCorrect ? 
+                    '<i class="fa-solid fa-circle-check text-emerald-600"></i> <span class="text-emerald-800">إجابة صحيحة! الشرح والتوضيح:</span>' : 
+                    '<i class="fa-solid fa-lightbulb text-amber-600"></i> <span class="text-amber-800">التوضيح والشرح العلمي:</span>';
+                document.getElementById('explanation-text').innerText = q.exp;
+            } else {
+                expBox.classList.add('hidden');
+            }
+
+            // Flag status button
+            const isFlagged = state.flaggedQuestions.has(q.id);
+            const flagBtnText = document.getElementById('flag-btn-text');
+            const btnFlag = document.getElementById('btn-flag');
+            if (isFlagged) {
+                flagBtnText.innerText = "سؤال معلّم";
+                btnFlag.className = "px-3 py-1.5 rounded-lg border border-amber-400 bg-amber-100 text-amber-800 text-xs font-bold transition-all flex items-center gap-1.5";
+            } else {
+                flagBtnText.innerText = "تعليم السؤال";
+                btnFlag.className = "px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-300 text-xs font-bold transition-all flex items-center gap-1.5";
+            }
+
+            // Prev/Next buttons
+            document.getElementById('btn-prev').disabled = state.currentQuestionIndex === 0;
+
+            // Progress bar
+            const progressPct = Math.round(((state.currentQuestionIndex + 1) / total) * 100);
+            document.getElementById('quiz-progress-bar').style.width = `${progressPct}%`;
+        }
+
+        function selectOption(qId, optIdx) {
+            state.userAnswers[qId] = optIdx;
+            state.answeredHistory.add(qId);
+            saveStateToStorage();
+
+            renderCurrentQuestion();
+            renderNavigatorGrid();
+        }
+
+        function clearCurrentAnswer() {
+            const q = state.activeQuizQuestions[state.currentQuestionIndex];
+            delete state.userAnswers[q.id];
+            renderCurrentQuestion();
+            renderNavigatorGrid();
+        }
+
+        function toggleFlagCurrentQuestion() {
+            const q = state.activeQuizQuestions[state.currentQuestionIndex];
+            if (state.flaggedQuestions.has(q.id)) {
+                state.flaggedQuestions.delete(q.id);
+            } else {
+                state.flaggedQuestions.add(q.id);
+            }
+            renderCurrentQuestion();
+            renderNavigatorGrid();
+        }
+
+        function prevQuestion() {
+            if (state.currentQuestionIndex > 0) {
+                state.currentQuestionIndex--;
+                renderCurrentQuestion();
+                renderNavigatorGrid();
+            }
+        }
+
+        function nextQuestion() {
+            if (state.currentQuestionIndex < state.activeQuizQuestions.length - 1) {
+                state.currentQuestionIndex++;
+                renderCurrentQuestion();
+                renderNavigatorGrid();
+            }
+        }
+
+        /* ==========================================================================
+           5. NAVIGATOR GRID & FILTERS
+           ========================================================================== */
+        function renderNavigatorGrid() {
+            const grid = document.getElementById('navigator-grid');
+            grid.innerHTML = '';
+
+            const total = state.activeQuizQuestions.length;
+            let answeredCount = 0;
+
+            state.activeQuizQuestions.forEach((q, idx) => {
+                const isAnswered = state.userAnswers[q.id] !== undefined;
+                const isFlagged = state.flaggedQuestions.has(q.id);
+                if (isAnswered) answeredCount++;
+
+                // Filter check
+                if (state.activeFilterGrid === 'flagged' && !isFlagged) return;
+                if (state.activeFilterGrid === 'unanswered' && isAnswered) return;
+
+                const btn = document.createElement('button');
+                btn.className = `w-full h-9 rounded-lg font-bold text-xs flex items-center justify-center transition-all relative ${
+                    state.currentQuestionIndex === idx ? 'ring-2 ring-slate-900 ring-offset-1' : ''
+                } ${
+                    isFlagged ? 'bg-amber-400 text-slate-900 font-extrabold' : 
+                    (isAnswered ? 'bg-medical-700 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200')
+                }`;
+
+                btn.innerText = idx + 1;
+                btn.onclick = () => {
+                    state.currentQuestionIndex = idx;
+                    renderCurrentQuestion();
+                    renderNavigatorGrid();
+                };
+
+                grid.appendChild(btn);
+            });
+
+            document.getElementById('nav-counter').innerText = `${answeredCount}/${total}`;
+        }
+
+        function filterGrid(filterType) {
+            state.activeFilterGrid = filterType;
+            renderNavigatorGrid();
+        }
+
+        /* ==========================================================================
+           6. SUBMISSION & RESULTS DASHBOARD
+           ========================================================================== */
+        function confirmSubmitQuiz() {
+            const unanswered = state.activeQuizQuestions.filter(q => state.userAnswers[q.id] === undefined).length;
+            let msg = "هل أتممت حل جميع الأسئلة وجاهز لمراجعة نتيجتك والتصحيح النهائي؟";
+            if (unanswered > 0) {
+                msg = `تنبيه: لديك عدد (${unanswered}) سؤال لم تقم بالإجابة عليها بعد. هل ترغب في إنهاء الاختبار وتصحيحه الآن؟`;
+            }
+            showModal("إنهاء وتصحيح الاختبار", msg, () => {
+                submitQuiz();
+            });
+        }
+
+        function confirmExitQuiz() {
+            showModal("مغادرة الاختبار", "هل أنت تأكد من الخروج من الاختبار الحالي؟ سيتم إلغاء التقدم غير المحفوظ في هذا الاختبار.", () => {
+                clearInterval(state.timerInterval);
+                returnToHome();
+            });
+        }
+
+        function submitQuiz() {
+            clearInterval(state.timerInterval);
+
+            // Calculate Score & Update Mistakes History
+            let correctCount = 0;
+            let wrongCount = 0;
+            let skippedCount = 0;
+
+            state.activeQuizQuestions.forEach(q => {
+                const userAns = state.userAnswers[q.id];
+                if (userAns === undefined) {
+                    skippedCount++;
+                } else if (userAns === q.answer) {
+                    correctCount++;
+                    state.userMistakesHistory.delete(q.id); // Remove from mistakes if corrected
+                } else {
+                    wrongCount++;
+                    state.userMistakesHistory.add(q.id); // Save to mistakes bank
+                }
+            });
+
+            saveStateToStorage();
+            updateHomeStats();
+
+            // Switch Screen
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-results').classList.remove('hidden');
+
+            // Render Results Data
+            const total = state.activeQuizQuestions.length;
+            const percent = Math.round((correctCount / total) * 100);
+
+            document.getElementById('result-total-qs').innerText = total;
+            document.getElementById('result-correct-qs').innerText = correctCount;
+            document.getElementById('result-wrong-qs').innerText = wrongCount;
+            document.getElementById('result-skipped-qs').innerText = skippedCount;
+
+            document.getElementById('result-score-percent').innerText = `${percent}%`;
+
+            // SVG Circle Progress
+            const svgCircle = document.getElementById('result-svg-circle');
+            svgCircle.setAttribute('stroke-dasharray', `${percent}, 100`);
+
+            // Grade Badge & Feedback
+            const gradeBadge = document.getElementById('result-grade-badge');
+            const feedbackText = document.getElementById('result-feedback-text');
+
+            if (percent >= 90) {
+                gradeBadge.className = "text-xs font-bold px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 mt-1";
+                gradeBadge.innerText = "امتياز ممتاز 🌟";
+                feedbackText.innerText = "أداء استثنائي يا دكتور محمد! إتقان تام لمفاهيم وموديول الـ IMB، استمر بهذا المستوى العالي!";
+            } else if (percent >= 75) {
+                gradeBadge.className = "text-xs font-bold px-2.5 py-0.5 rounded bg-teal-100 text-teal-800 mt-1";
+                gradeBadge.innerText = "جيد جداً مرتفع 👍";
+                feedbackText.innerText = "عمل رائع جداً! استعراض ممتاز للأسئلة، راجع الأخطاء البسيطة لتقفل الدرجة النهائية.";
+            } else if (percent >= 60) {
+                gradeBadge.className = "text-xs font-bold px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 mt-1";
+                gradeBadge.innerText = "جيد - يحتاج تحسين";
+                feedbackText.innerText = "نتيجة مقبولة، لكن يُفضل إعادة مراجعة الدروس ذات النسب المنخفضة من بنك الأخطاء لتضمن النتيجة.";
+            } else {
+                gradeBadge.className = "text-xs font-bold px-2.5 py-0.5 rounded bg-red-100 text-red-800 mt-1";
+                gradeBadge.innerText = "يحتاج إعادة مذاكرة";
+                feedbackText.innerText = "لا تقلق يا دكتور، اعتبر هذا الاختبار خطوة أولى لتحديد النقاط الضعيفة، قم بمراجعة التوضيحات العلمية وأعد الحل.";
+            }
+
+            // Render Lesson Breakdown & Detailed Review List
+            renderLessonPerformanceBreakdown();
+            renderReviewList();
+        }
+
+        function renderLessonPerformanceBreakdown() {
+            const container = document.getElementById('lesson-performance-breakdown');
+            container.innerHTML = '';
+
+            LESSONS_METADATA.forEach(lesson => {
+                const lessonQsInQuiz = state.activeQuizQuestions.filter(q => q.lessonId === lesson.id);
+                if (lessonQsInQuiz.length === 0) return;
+
+                let correctInLesson = 0;
+                lessonQsInQuiz.forEach(q => {
+                    if (state.userAnswers[q.id] === q.answer) correctInLesson++;
+                });
+
+                const pct = Math.round((correctInLesson / lessonQsInQuiz.length) * 100);
+
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between gap-4 text-xs font-semibold";
+                item.innerHTML = `
+                    <div class="w-1/3 truncate text-slate-700 font-bold">${lesson.title}</div>
+                    <div class="w-1/2 bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-teal-600 h-full transition-all" style="width: ${pct}%"></div>
+                    </div>
+                    <div class="w-12 text-left text-slate-800 font-bold">${pct}%</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderReviewList() {
+            const container = document.getElementById('review-items-container');
+            container.innerHTML = '';
+
+            const letters = ['a', 'b', 'c', 'd'];
+
+            state.activeQuizQuestions.forEach((q, idx) => {
+                const userAns = state.userAnswers[q.id];
+                const isCorrect = userAns === q.answer;
+                const isSkipped = userAns === undefined;
+                const isFlagged = state.flaggedQuestions.has(q.id);
+
+                // Filter check
+                if (state.activeReviewFilter === 'correct' && !isCorrect) return;
+                if (state.activeReviewFilter === 'incorrect' && (isCorrect || isSkipped)) return;
+                if (state.activeReviewFilter === 'flagged' && !isFlagged) return;
+
+                const card = document.createElement('div');
+                card.className = `p-5 rounded-xl border text-xs sm:text-sm ${
+                    isCorrect ? 'bg-emerald-50/40 border-emerald-200' : 
+                    (isSkipped ? 'bg-amber-50/40 border-amber-200' : 'bg-red-50/40 border-red-200')
+                }`;
+
+                let optsMarkup = '';
+                q.options.forEach((optText, oIdx) => {
+                    let optStyle = "border-slate-200 bg-white text-slate-700";
+                    if (oIdx === q.answer) {
+                        optStyle = "border-emerald-500 bg-emerald-100 text-emerald-900 font-bold";
+                    } else if (userAns === oIdx && oIdx !== q.answer) {
+                        optStyle = "border-red-400 bg-red-100 text-red-900 font-bold";
+                    }
+
+                    optsMarkup += `
+                        <div class="en-text p-2.5 rounded-lg border flex items-center justify-between ${optStyle}">
+                            <span><strong class="uppercase mr-1 font-bold">${letters[oIdx]}.</strong> ${optText}</span>
+                            ${oIdx === q.answer ? '<i class="fa-solid fa-check text-emerald-700"></i>' : 
+                            (userAns === oIdx ? '<i class="fa-solid fa-xmark text-red-600"></i>' : '')}
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-200/60">
+                        <span class="font-bold text-slate-700">سؤال رقم ${idx + 1} (Orig. #${q.orig})</span>
+                        <div class="flex items-center gap-2">
+                            ${isFlagged ? '<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[11px] font-bold">معلّم</span>' : ''}
+                            <span class="px-2.5 py-0.5 rounded-full font-bold text-[11px] ${
+                                isCorrect ? 'bg-emerald-100 text-emerald-800' : 
+                                (isSkipped ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800')
+                            }">
+                                ${isCorrect ? 'إجابة صحيحة' : (isSkipped ? 'تم تخطيه' : 'إجابة خاطئة')}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="en-text font-bold text-slate-900 text-base mb-4 leading-relaxed">${q.q}</p>
+                    
+                    <div class="space-y-2 mb-4">
+                        ${optsMarkup}
+                    </div>
+
+                    <div class="p-3 bg-white rounded-lg border border-slate-200/80 text-slate-700 leading-relaxed text-xs">
+                        <strong class="text-medical-700 block mb-1 font-bold"><i class="fa-solid fa-lightbulb"></i> الشرح والتوضيح:</strong>
+                        ${q.exp}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function filterReviewList(filter) {
+            state.activeReviewFilter = filter;
+            
+            ['rf-all', 'rf-correct', 'rf-incorrect', 'rf-flagged'].forEach(id => {
+                document.getElementById(id).className = "px-3 py-1 rounded-md text-slate-600 hover:bg-white/50";
+            });
+            document.getElementById(`rf-${filter}`).className = "px-3 py-1 rounded-md bg-white text-slate-900 shadow-sm font-bold";
+
+            renderReviewList();
+        }
+
+        function returnToHome() {
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-results').classList.add('hidden');
+            document.getElementById('screen-home').classList.remove('hidden');
+
+            renderLessonsGrid();
+            updateHomeStats();
+        }
+
+        function retakeCurrentQuiz() {
+            startQuiz(state.activeQuizType);
+        }
+
+        /* ==========================================================================
+           7. GLOBAL MODAL UTILITIES
+           ========================================================================== */
+        function showModal(title, bodyText, confirmCallback) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = bodyText;
+
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+            if (confirmCallback) {
+                confirmBtn.classList.remove('hidden');
+                confirmBtn.onclick = () => {
+                    confirmCallback();
+                    closeModal();
+                };
+            } else {
+                confirmBtn.classList.add('hidden');
+            }
+
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-container').classList.add('hidden');
+        }
+
+        function confirmResetAllData() {
+            showModal("تصفير السجل والتقدم", "هل أنت تأكد من رغبتك في مسح سجل الإجابات وبنك الأخطاء بالكامل؟ لا يمكن التراجع عن هذا الإجراء.", () => {
+                localStorage.removeItem('imb_dr_mohamed_mistakes');
+                localStorage.removeItem('imb_dr_mohamed_answered');
+                state.userMistakesHistory.clear();
+                state.answeredHistory.clear();
+                returnToHome();
+            });
+        }
+    </script>
+</body>
+</html>
